@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: epi-proxy
+  labels:
+    app: epi-proxy
+    tier: proxy
+  namespace: epi
+spec:
+  type: ClusterIP
+  ports:
+  - port: 1080
+  selector:
+    app: epi-proxy
+    tier: proxy
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: epi-proxy
+  namespace: epi
+spec:
+  replicas: 1
+  selector:
+   matchLabels:
+    app: epi-proxy
+  template:
+    metadata:
+      labels:
+        app: epi-proxy
+        tier: proxy
+    spec:
+      containers:
+      - name: epi-proxy
+        image: melamin/epi-proxy:v0.01
+        ports:
+        - containerPort: 1080
+        securityContext:
+          privileged: true
