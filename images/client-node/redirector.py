@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
+import logging
 from daemonize import Daemonize
-from loguru import logger
 from socket import AF_INET, SOCK_STREAM, socket as Socket, SOL_IP
 from sockschain import setdefaultproxy, PROXY_TYPE_SOCKS5, socksocket as SocksSocket
 from struct import unpack
@@ -8,6 +8,15 @@ from os import environ
 from threading import Thread
 from typing import Tuple
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+logger.propagate = False
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh = logging.FileHandler("/var/log/redirector.log", "w")
+fh.setFormatter(formatter)
+fh.setLevel(logging.DEBUG)
+logger.addHandler(fh)
+keep_fds = [fh.stream.fileno()]
 
 def get_original_destination(socket: Socket) -> Tuple[str, int]:
     """
@@ -66,7 +75,6 @@ def redirector():
     """
     Redirects all incoming traffic through the proxy.
     """
-    logger.add("file_{time}.log", format="{time} {level} {message}", filter="my_module", level="INFO")
 
     PROXY_HOST=environ.get("PROXY_HOST")
     PROXY_PORT=int(environ.get("PROXY_PORT", 1080))
@@ -90,5 +98,5 @@ def redirector():
 
 
 if __name__ == "__main__":
-    daemon = Daemonize(app="redirector", pid="/tmp/redirector.pid", action=redirector)
+    daemon = Daemonize(app="redirector", pid="/tmp/redirector.pid", action=redirector, keep_fds=keep_fds)
     daemon.start()

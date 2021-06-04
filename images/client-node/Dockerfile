@@ -4,6 +4,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     curl \
     iptables \
     nano \
+    vim \
+    net-tools \
+    tcpdump \
     python3 \
     python3-pip \
     python3-socksipychain \
