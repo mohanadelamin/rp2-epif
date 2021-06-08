@@ -203,7 +203,9 @@ class BCF:
     """BCF Bridging function chain"""
 
     def __init__(self, server_socket, chain=0):
-        self.VNF_cluster_IPs = {"firewall": "10.96.0.2:5000"}
+        FW_SVC=os.environ.get("EPI_VNF_FW")
+        FW_SVC_PORT=os.environ.get("EPI_VNF_FW_PORT", 5000)
+        self.VNF_cluster_IPs = {"firewall": gethostbyname(FW_SVC) + ":" + FW_SVC_PORT}
 
         print("[BCF] get peername")
 
@@ -298,7 +300,7 @@ class SocketPipe:
         self.bcf = BCF(self._socket2)
         print("[SocketPipe] create iptables")
         
-        self.bcf.create_iptables()
+        #self.bcf.create_iptables()
 
         print("[SocketPipe] iptables are created")
 
@@ -332,7 +334,7 @@ class SocketPipe:
 
 
         # DELETE iptables
-        self.bcf.delete_iptables()
+        #self.bcf.delete_iptables()
 
 
 

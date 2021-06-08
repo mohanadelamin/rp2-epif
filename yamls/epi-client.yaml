@@ -39,7 +39,7 @@ spec:
         imagePullPolicy: Always
         envFrom:
         - configMapRef:
-            name: epi-client-config
+            name: epi-config
         ports:
         - containerPort: 80
         securityContext:
