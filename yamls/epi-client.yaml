@@ -35,7 +35,8 @@ spec:
     spec:
       containers:
       - name: epi-client
-        image: melamin/epi-client:v0.11
+        image: pimpaardekooper/vnf_instances:client
+        imagePullPolicy: Always
         envFrom:
         - configMapRef:
             name: epi-client-config

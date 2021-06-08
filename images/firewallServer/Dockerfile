@@ -5,11 +5,12 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     python3-pip \
     iptables \
     tcpdump \
-    iputils-ping \
+    sudo \
  && rm -rf /var/lib/apt/lists/*
 
-ENV PYTHONUNBUFFERED=1
+ADD rules.sh rules.sh
+ADD entrypoint.sh entrypoint.sh
 
-ADD proxy.py proxy.py
+ENTRYPOINT [ "./entrypoint.sh"]
 
-ENTRYPOINT [ "./proxy.py", "start", "-f" ]
+

@@ -66,12 +66,12 @@ def build_command_response(reply):
 
 def close_session(session):
     session.get_client_socket().close()
-    print("Session[%s] closed", session.get_id())
+    logging.info("Session[%s] closed", session.get_id())
 
 
-def run_daemon_process(stdout='/dev/stdout',
+def run_daemon_process(stdout='/dev/null',
                        stderr=None,
-                       stdin='/dev/stdin',
+                       stdin='/dev/null',
                        pid_file=None,
                        start_msg='started with pid %s'):
     """
@@ -125,12 +125,10 @@ def run_daemon_process(stdout='/dev/stdout',
 class Session:
     index = 0
 
-    def __init__(self, client_socket, client_address):
+    def __init__(self, client_socket):
         Session.index += 1
         self.__id = Session.index
         self.__client_socket = client_socket
-        self._client_ip = client_address[0]
-        self._client_port = client_address[1]
         self._attr = {}
 
     def get_id(self):
@@ -201,98 +199,13 @@ class ReplyType:
     ADDRESS_TYPE_NOT_SUPPORTED = ServerReply(8)
 
 
-class BCF:
-    """BCF Bridging function chain"""
-
-    def __init__(self, session, chain=0):
-        self.session = session
-        self.VNF_cluster_IPs = {"firewall": "145.100.106.201"}
-
-        print("[BCF] get peername")
-
-        self.src, self.sport = self.session._client_ip, self.session._client_port
-
-        print(f"[BCF] peername is src,port={self.src},{self.sport}")
-
-
-    def create_iptables(self):
-        print("[BCF] create iptables")
-        first_rule = (f"iptables -t nat -A OUTPUT -p tcp  "
-                f"--sport {self.sport} --src {self.src} -j DNAT "
-                f"--to-destination {self.VNF_cluster_IPs['firewall']}:{50000}")
-
-        # log_first_rule = (f"iptables -t nat -A OUTPUT -p tcp "
-        #         f"--sport {self.sport} --src {self.src} -j LOG --log-level info")
-
-        print(f"[BCF] first rule {first_rule}")
-
-        # Route traffic through clusterIP of the VNF instance
-        os.system(first_rule)
-
-
-        second_rule = (f"iptables -t nat -A OUTPUT -p tcp "
-                f"--dport {self.sport} --dst {self.src} -j DNAT "
-                f"--to-destination {self.VNF_cluster_IPs['firewall']}:{50000}")
-        
-        # log_second_rule = (f"iptables -t nat -A OUTPUT -p tcp "
-        #         f"--dport {self.sport} --dst {self.src} -j LOG --log-level info")
-
-        print(f"[BCF] second rule {second_rule}")
-
-        # Route traffic going back to clusterIP of the VNF instance
-        os.system(second_rule)
-
-
-        # Keeps original intact.
-        os.system("iptables -t nat -A POSTROUTING -j MASQUERADE")
-        print("[BCF] exit create iptables")
-
-
-    def delete_iptables(self):
-        first_rule = (f"iptables -t nat -D OUTPUT -p tcp "
-                f"--sport {self.sport} --src {self.src} -j DNAT "
-                f"--to-destination {self.VNF_cluster_IPs['firewall']}:{50000}")
-
-        # Route traffic through clusterIP of the VNF instance
-        os.system(first_rule)
-
-        print("[BCF] second rule")
-
-        second_rule = (f"iptables -t nat -D OUTPUT -p tcp "
-                f"--dport {self.sport} --dst {self.src} -j DNAT "
-                f"--to-destination {self.VNF_cluster_IPs['firewall']}:{50000}")
-        
-        # Route traffic going back to clusterIP of the VNF instance
-        os.system(second_rule)
-
-        os.system("iptables -t nat -D POSTROUTING -j MASQUERADE")
-
-    # def create_chain():
-    #     """Creates chain of bridging function, should be given by EPI framework."""
-    #     chains = {0: ["firewall"], 1: ["encryption"], 2: ["firewall", "encryption"]}
-
-    #     return chains[0]
-
-        
-
 class SocketPipe:
     BUFFER_SIZE = 1024 * 1024
 
-    def __init__(self, socket1, socket2, session):
+    def __init__(self, socket1, socket2):
         self._socket1 = socket1
         self._socket2 = socket2
-        self._session = session
         self.__running = False
-        # ADD iptables and BCF.
-
-        print("[SocketPipe] create BCF")
-        self.bcf = BCF(self._session)
-        print("[SocketPipe] create iptables")
-        
-        # self.bcf.create_iptables()
-
-        print("[SocketPipe] iptables are created")
-
 
         self.t1 = threading.Thread(target=self.__transfer, args=(self._socket1, self._socket2))
         self.t2 = threading.Thread(target=self.__transfer, args=(self._socket2, self._socket1))
@@ -301,13 +214,11 @@ class SocketPipe:
         while self.__running:
             try:
                 data = socket1.recv(self.BUFFER_SIZE)
-
                 if len(data) > 0:
                     socket2.sendall(data)
                 else:
                     break
             except IOError:
-
                 self.stop()
         self.stop()
 
@@ -320,13 +231,6 @@ class SocketPipe:
     def stop(self):
         self._socket1.close()
         self._socket2.close()
-
-
-        # DELETE iptables
-        # self.bcf.delete_iptables()
-
-
-
         self.__running = False
 
     def is_running(self):
@@ -347,11 +251,11 @@ class CommandExecutor:
         :return: None
         """
         address = self.__get_address()
-        print("Connect request to %s", address)
+        logging.info("Connect request to %s", address)
         result = self.__proxy_socket.connect_ex(address)
         if result == 0:
             self.__client.send(build_command_response(ReplyType.SUCCEEDED))
-            socket_pipe = SocketPipe(self.__client, self.__proxy_socket, self.__session)
+            socket_pipe = SocketPipe(self.__client, self.__proxy_socket)
             socket_pipe.start()
             while socket_pipe.is_running():
                 pass
@@ -417,11 +321,11 @@ class Socks5RequestHandler(StreamRequestHandler):
         StreamRequestHandler.__init__(self, request, client_address, server)
 
     def handle(self):
-        session = Session(self.connection, self.client_address)
-        print('Create session[%s] for %s:%d', 1, self.client_address[0], self.client_address[1])
+        session = Session(self.connection)
+        logging.info('Create session[%s] for %s:%d', 1, self.client_address[0], self.client_address[1])
         # print(self.server.allowed)
         if self.server.allowed and self.client_address[0] not in self.server.allowed:
-            print('Remote IP not in allowed list. Closing connection')
+            logging.info('Remote IP not in allowed list. Closing connection')
             close_session(session)
             return
         client = self.connection
@@ -435,11 +339,11 @@ class Socks5RequestHandler(StreamRequestHandler):
         elif methods.__contains__(SocksMethod.USERNAME_PASSWORD) and auth:
             client.send(b"\x05\x02")
             if not self.__do_username_password_auth():
-                print('Session[%d] authentication failed', session.get_id())
+                logging.info('Session[%d] authentication failed', session.get_id())
                 close_session(session)
                 return
         else:
-            print('Client requested unknown method (%s, %s->%s). Cannot continue.', methods, method_num,
+            logging.info('Client requested unknown method (%s, %s->%s). Cannot continue.', methods, method_num,
                          meth_bytes)
             client.send(b"\x05\xFF")
             return
@@ -461,21 +365,21 @@ class Socks5RequestHandler(StreamRequestHandler):
             ip6_13, ip6_14, ip6_15, ip6_16, \
             port = struct.unpack('!' + ('b' * 16) + 'H', client.recv(18))
 
-            print("Address type not implemented: %s (IPV6 Connect)", address_type)
-            print("Params: %s, port: %s", (
+            logging.warn("Address type not implemented: %s (IPV6 Connect)", address_type)
+            logging.info("Params: %s, port: %s", (
                 ip6_01, ip6_02, ip6_03, ip6_04, ip6_05, ip6_06, ip6_07, ip6_08, ip6_09, ip6_10, ip6_11, ip6_12, ip6_13,
                 ip6_14, ip6_15, ip6_16), port)
             client.send(build_command_response(ReplyType.ADDRESS_TYPE_NOT_SUPPORTED))
             return
 
         else:  # address type not support
-            print("Address type not supported: %s", address_type)
+            logging.warn("Address type not supported: %s", address_type)
             client.send(build_command_response(ReplyType.ADDRESS_TYPE_NOT_SUPPORTED))
             return
 
         command_executor = CommandExecutor(host, port, session)
         if command == SocksCommand.CONNECT:
-            print("Session[%s] Request connect %s:%s", session.get_id(), host, port)
+            logging.info("Session[%s] Request connect %s:%s", session.get_id(), host, port)
             command_executor.do_connect()
         close_session(session)
 
@@ -512,7 +416,7 @@ class Socks5Server(ThreadingTCPServer):
         self.th = threading.Thread(target=self.serve_forever)
 
     def serve_forever(self, poll_interval=0.5):
-        print("Create SOCKS5 server at port %d", self.__port)
+        logging.info("Create SOCKS5 server at port %d", self.__port)
         ThreadingTCPServer.serve_forever(self, poll_interval)
 
     def finish_request(self, request, client_address):
@@ -577,12 +481,12 @@ def status(pid_file):
 
 
 def start_command(args):
-    enable_log = False
+    enable_log = True
     log_file = args.logfile
     auth = args.auth is not None
     pid_file = args.pidfile
     user_manager = UserManager()
-    should_daemonisze = False
+    should_daemonisze = not args.foreground
     if auth:
         for user in args.auth:
             user_pwd = user.split(':')
@@ -607,7 +511,7 @@ def start_command(args):
     except KeyboardInterrupt:
         socks5_server.server_close()
         socks5_server.shutdown()
-        print("SOCKS5 server shutdown")
+        logging.info("SOCKS5 server shutdown")
 
 
 def stop_command(args):
@@ -623,7 +527,6 @@ def status_command(args):
 
 
 def main():
-    print("hello")
     default_pid_file = os.path.join(os.path.expanduser('~'), '.pysocks.pid')
     default_log_file = os.path.join(os.path.expanduser('~'), 'pysocks.log')
     parser = argparse.ArgumentParser(description='start a simple socks5 server',
