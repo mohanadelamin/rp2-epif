@@ -7,7 +7,7 @@ import signal
 import struct
 import sys
 import threading
-from socket import AF_INET, SOCK_STREAM, socket
+from socket import AF_INET, SOCK_STREAM, socket, gethostbyname, gethostname
 from socketserver import BaseServer, StreamRequestHandler, ThreadingTCPServer
 
 # https://github.com/fengyouchao/pysocks
@@ -125,12 +125,10 @@ def run_daemon_process(stdout='/dev/stdout',
 class Session:
     index = 0
 
-    def __init__(self, client_socket, client_address):
+    def __init__(self, client_socket):
         Session.index += 1
         self.__id = Session.index
         self.__client_socket = client_socket
-        self._client_ip = client_address[0]
-        self._client_port = client_address[1]
         self._attr = {}
 
     def get_id(self):
@@ -204,22 +202,28 @@ class ReplyType:
 class BCF:
     """BCF Bridging function chain"""
 
-    def __init__(self, session, chain=0):
-        self.session = session
-        self.VNF_cluster_IPs = {"firewall": "145.100.106.201"}
+    def __init__(self, server_socket, chain=0):
+        self.VNF_cluster_IPs = {"firewall": "10.96.0.2:5000"}
 
         print("[BCF] get peername")
 
-        self.src, self.sport = self.session._client_ip, self.session._client_port
+        # Get ip of hostname
+        hostname = gethostname()
+
+        self.src = gethostbyname(hostname)
+        self.sport = server_socket.getsockname()[1]
 
         print(f"[BCF] peername is src,port={self.src},{self.sport}")
 
 
     def create_iptables(self):
         print("[BCF] create iptables")
+
+        #  iptables -t nat -A OUTPUT --src 10.244.1.84 -j DNAT --to-destination 10.96.0.2
+
         first_rule = (f"iptables -t nat -A OUTPUT -p tcp  "
-                f"--sport {self.sport} --src {self.src} -j DNAT "
-                f"--to-destination {self.VNF_cluster_IPs['firewall']}:{50000}")
+                f" --src {self.src} -j DNAT "
+                f"--to-destination {self.VNF_cluster_IPs['firewall']}")
 
         # log_first_rule = (f"iptables -t nat -A OUTPUT -p tcp "
         #         f"--sport {self.sport} --src {self.src} -j LOG --log-level info")
@@ -230,42 +234,48 @@ class BCF:
         os.system(first_rule)
 
 
-        second_rule = (f"iptables -t nat -A OUTPUT -p tcp "
-                f"--dport {self.sport} --dst {self.src} -j DNAT "
-                f"--to-destination {self.VNF_cluster_IPs['firewall']}:{50000}")
+        # second_rule = (f"iptables -t nat -A OUTPUT -p tcp "
+        #         f"--dport {self.sport} --dst {self.src} -j DNAT "
+        #         f"--to-destination {self.VNF_cluster_IPs['firewall']}:{50000}")
         
+
+
         # log_second_rule = (f"iptables -t nat -A OUTPUT -p tcp "
         #         f"--dport {self.sport} --dst {self.src} -j LOG --log-level info")
 
-        print(f"[BCF] second rule {second_rule}")
+        # print(f"[BCF] second rule {second_rule}")
 
         # Route traffic going back to clusterIP of the VNF instance
-        os.system(second_rule)
+        # os.system(second_rule)
 
 
         # Keeps original intact.
-        os.system("iptables -t nat -A POSTROUTING -j MASQUERADE")
+        # os.system("iptables -t nat -A POSTROUTING -j MASQUERADE")
         print("[BCF] exit create iptables")
 
 
     def delete_iptables(self):
-        first_rule = (f"iptables -t nat -D OUTPUT -p tcp "
-                f"--sport {self.sport} --src {self.src} -j DNAT "
-                f"--to-destination {self.VNF_cluster_IPs['firewall']}:{50000}")
+        print("[BCF] delete iptables")
+
+        first_rule = (f"iptables -t nat -D OUTPUT -p tcp  "
+                f"--src {self.src} -j DNAT "
+                f"--to-destination {self.VNF_cluster_IPs['firewall']}")
 
         # Route traffic through clusterIP of the VNF instance
+        print("[BCF] delete rule", first_rule)
+
         os.system(first_rule)
 
-        print("[BCF] second rule")
+        # print("[BCF] second rule")
 
-        second_rule = (f"iptables -t nat -D OUTPUT -p tcp "
-                f"--dport {self.sport} --dst {self.src} -j DNAT "
-                f"--to-destination {self.VNF_cluster_IPs['firewall']}:{50000}")
+        # second_rule = (f"iptables -t nat -D OUTPUT -p tcp "
+        #         f"--dport {self.sport} --dst {self.src} -j DNAT "
+        #         f"--to-destination {self.VNF_cluster_IPs['firewall']}:{50000}")
         
         # Route traffic going back to clusterIP of the VNF instance
-        os.system(second_rule)
+        # os.system(second_rule)
 
-        os.system("iptables -t nat -D POSTROUTING -j MASQUERADE")
+        # os.system("iptables -t nat -D POSTROUTING -j MASQUERADE")
 
     # def create_chain():
     #     """Creates chain of bridging function, should be given by EPI framework."""
@@ -278,18 +288,17 @@ class BCF:
 class SocketPipe:
     BUFFER_SIZE = 1024 * 1024
 
-    def __init__(self, socket1, socket2, session):
+    def __init__(self, socket1, socket2):
         self._socket1 = socket1
         self._socket2 = socket2
-        self._session = session
         self.__running = False
         # ADD iptables and BCF.
 
         print("[SocketPipe] create BCF")
-        self.bcf = BCF(self._session)
+        self.bcf = BCF(self._socket2)
         print("[SocketPipe] create iptables")
         
-        # self.bcf.create_iptables()
+        self.bcf.create_iptables()
 
         print("[SocketPipe] iptables are created")
 
@@ -323,7 +332,7 @@ class SocketPipe:
 
 
         # DELETE iptables
-        # self.bcf.delete_iptables()
+        self.bcf.delete_iptables()
 
 
 
@@ -351,7 +360,7 @@ class CommandExecutor:
         result = self.__proxy_socket.connect_ex(address)
         if result == 0:
             self.__client.send(build_command_response(ReplyType.SUCCEEDED))
-            socket_pipe = SocketPipe(self.__client, self.__proxy_socket, self.__session)
+            socket_pipe = SocketPipe(self.__client, self.__proxy_socket)
             socket_pipe.start()
             while socket_pipe.is_running():
                 pass
@@ -417,7 +426,7 @@ class Socks5RequestHandler(StreamRequestHandler):
         StreamRequestHandler.__init__(self, request, client_address, server)
 
     def handle(self):
-        session = Session(self.connection, self.client_address)
+        session = Session(self.connection)
         print('Create session[%s] for %s:%d', 1, self.client_address[0], self.client_address[1])
         # print(self.server.allowed)
         if self.server.allowed and self.client_address[0] not in self.server.allowed:
