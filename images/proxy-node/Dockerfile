@@ -15,9 +15,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     iputils-ping \
  && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install flask
-
-
 ENV PYTHONUNBUFFERED=1
 
 ADD proxy.py proxy.py
