@@ -36,8 +36,11 @@ spec:
     spec:
       containers:
       - name: epi-proxy
-        image: pimpaardekooper/vnf_instances:proxy
+        image: melamin/vnf_instances:proxy
         imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: epi-config
         ports:
         - containerPort: 1080
         - containerPort: 80
