@@ -30,5 +30,5 @@ helm install locust deliveryhero/locust -n epi --set service.type="LoadBalancer"
 --set worker.resources.requests.cpu="200m" \
 --set worker.hpa.enabled=true \
 --set worker.hpa.maxReplicas=5 \
---set worker.hpa.targetCPUUtilizationPercentage=40 \
+--set worker.hpa.targetCPUUtilizationPercentage=80 \
 --set loadtest.locust_host="epi-server"
