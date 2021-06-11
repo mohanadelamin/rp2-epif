@@ -14,7 +14,7 @@ spec:
   - port: 5000
   selector:
     app: epi-firewall
-    tier: proxy
+    tier: firewall
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -30,7 +30,7 @@ spec:
     metadata:
       labels:
         app: epi-firewall
-        tier: proxy
+        tier: firewall
     spec:
       containers:
       - name: epi-firewall

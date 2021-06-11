@@ -9,12 +9,31 @@ import sys
 import threading
 from socket import AF_INET, SOCK_STREAM, socket, gethostbyname, gethostname
 from socketserver import BaseServer, StreamRequestHandler, ThreadingTCPServer
+from flask import Flask, request
 
 # https://github.com/fengyouchao/pysocks
+
+
+
+class MetricGatherer:
+    def __init__(self):
+        self.metrics = {"number_of_requests": 0}
+
+    def get(self, metric):
+        return self.metrics[metric]
+
+app = Flask(__name__)
+metricGatherer = MetricGatherer()
+
+@app.route("/metrics", methods=["GET"])
+def metrics():
+    return metricGatherer.metrics
 
 __author__ = 'Youchao Feng'
 support_os = ('Darwin', 'Linux')
 current_os = platform.system()
+
+
 
 
 def byte_to_int(b):
@@ -222,7 +241,7 @@ class BCF:
         #  iptables -t nat -A OUTPUT --src 10.244.1.84 -j DNAT --to-destination 10.96.0.2
 
         first_rule = (f"iptables -t nat -A OUTPUT -p tcp  "
-                f" --src {self.src} -j DNAT "
+                f"--sport {self.sport} --src {self.src} -m state --state NEW,ESTABLISHED,RELATED  -j DNAT "
                 f"--to-destination {self.VNF_cluster_IPs['firewall']}")
 
         # log_first_rule = (f"iptables -t nat -A OUTPUT -p tcp "
@@ -258,7 +277,7 @@ class BCF:
         print("[BCF] delete iptables")
 
         first_rule = (f"iptables -t nat -D OUTPUT -p tcp  "
-                f"--src {self.src} -j DNAT "
+                f"--sport {self.sport} --src {self.src} -m state --state NEW,ESTABLISHED,RELATED  -j DNAT "
                 f"--to-destination {self.VNF_cluster_IPs['firewall']}")
 
         # Route traffic through clusterIP of the VNF instance
@@ -298,7 +317,7 @@ class SocketPipe:
         self.bcf = BCF(self._socket2)
         print("[SocketPipe] create iptables")
         
-        self.bcf.create_iptables()
+        # self.bcf.create_iptables()
 
         print("[SocketPipe] iptables are created")
 
@@ -426,6 +445,10 @@ class Socks5RequestHandler(StreamRequestHandler):
         StreamRequestHandler.__init__(self, request, client_address, server)
 
     def handle(self):
+        # METRICS: added
+        print("[HANDLE] add to metrics")
+        metricGatherer.metrics["number_of_requests"] += 1
+
         session = Session(self.connection)
         print('Create session[%s] for %s:%d', 1, self.client_address[0], self.client_address[1])
         # print(self.server.allowed)
@@ -517,6 +540,7 @@ class Socks5Server(ThreadingTCPServer):
         self.__user_manager = user_manager
         self.__sessions = {}
         self.allowed = allowed
+
 
         self.th = threading.Thread(target=self.serve_forever)
 
@@ -619,6 +643,7 @@ def start_command(args):
         print("SOCKS5 server shutdown")
 
 
+
 def stop_command(args):
     pid_file = pid_file = args.pidfile
     stop(pid_file)
@@ -662,4 +687,5 @@ def main():
 
 
 if __name__ == '__main__':
+    t1 = threading.Thread(target=app.run, kwargs={'host':'0.0.0.0', 'port': 80}).start()
     main()

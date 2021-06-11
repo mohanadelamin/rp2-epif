@@ -11,6 +11,9 @@ spec:
   type: ClusterIP
   ports:
   - port: 1080
+    name: socks
+  - port: 80
+    name: http
   selector:
     app: epi-proxy
     tier: proxy
@@ -37,6 +40,7 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 1080
+        - containerPort: 80
         securityContext:
           privileged: true
 

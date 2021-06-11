@@ -1,0 +1,1 @@
+./autoscalers/vpa/autoscaler/vertical-pod-autoscaler/hack/vpa-down.sh
