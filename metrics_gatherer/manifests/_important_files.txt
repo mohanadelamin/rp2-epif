@@ -1,0 +1,6 @@
+custom-metrics-apiserver-deployment:
+    -- prometheus_url
+    --metrics-relist-interval=1m
+
+custom-metrics-config-map:
+    shows what is queried from the prometheus instance.

@@ -19,15 +19,16 @@ class MetricGatherer:
     def __init__(self):
         self.metrics = {"number_of_requests": 0}
 
-    def get(self, metric):
-        return self.metrics[metric]
+    def server_http_requests(self):
+        print("Get metrics")
+        return f"# HELP http_requests_total The amount of requests served by the server in total\n# TYPE http_requests_total counter\nhttp_requests_total {self.metrics['number_of_requests']}\n"
 
 app = Flask(__name__)
 metricGatherer = MetricGatherer()
 
 @app.route("/metrics", methods=["GET"])
 def metrics():
-    return metricGatherer.metrics
+    return metricGatherer.server_http_requests()
 
 __author__ = 'Youchao Feng'
 support_os = ('Darwin', 'Linux')
@@ -316,7 +317,7 @@ class SocketPipe:
         # ADD iptables and BCF.
 
         print("[SocketPipe] create BCF")
-        self.bcf = BCF(self._socket2)
+        # self.bcf = BCF(self._socket2)
         print("[SocketPipe] create iptables")
         
         # self.bcf.create_iptables()
