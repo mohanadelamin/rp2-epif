@@ -35,8 +35,6 @@ support_os = ('Darwin', 'Linux')
 current_os = platform.system()
 
 
-
-
 def byte_to_int(b):
     """
     Convert Unsigned byte to int
@@ -480,10 +478,6 @@ class Socks5RequestHandler(StreamRequestHandler):
         StreamRequestHandler.__init__(self, request, client_address, server)
 
     def handle(self):
-        # METRICS: added
-        print("[HANDLE] add to metrics")
-        metricGatherer.metrics["number_of_requests"] += 1
-
         session = Session(self.connection)
         print('Create session[%s] for %s:%d', 1, self.client_address[0], self.client_address[1])
         # print(self.server.allowed)
@@ -575,7 +569,6 @@ class Socks5Server(ThreadingTCPServer):
         self.__user_manager = user_manager
         self.__sessions = {}
         self.allowed = allowed
-
 
         self.th = threading.Thread(target=self.serve_forever)
 
@@ -678,7 +671,6 @@ def start_command(args):
         print("SOCKS5 server shutdown")
 
 
-
 def stop_command(args):
     pid_file = pid_file = args.pidfile
     stop(pid_file)
@@ -722,5 +714,4 @@ def main():
 
 
 if __name__ == '__main__':
-    t1 = threading.Thread(target=app.run, kwargs={'host':'0.0.0.0', 'port': 80}).start()
     main()
