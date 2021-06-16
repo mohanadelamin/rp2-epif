@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
       - name: epi-proxy
-        image: pimpaardekooper/vnf_instances:proxy
+        image: melamin/epi_proxy:v0.0.3
         imagePullPolicy: Always
         envFrom:
         - configMapRef:
