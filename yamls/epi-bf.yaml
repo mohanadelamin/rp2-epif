@@ -33,8 +33,8 @@ spec:
       containers:
       - name: epi-bf
         #image: melamin/epi_vnf_http_filter:v0.0.9
-        #image: melamin/epi_vnf_network_monitor:v0.0.3
-        image: melamin/epi_vnf_firewall:v0.0.7
+        image: melamin/epi_vnf_network_monitor:v0.0.9
+        #image: melamin/epi_vnf_firewall:v0.0.7
         imagePullPolicy: Always
         envFrom:
         - configMapRef:
@@ -43,8 +43,8 @@ spec:
         - containerPort: 5000
         resources:
           limits:
-            cpu: 500m
-            memory: "200Mi"
+            cpu: 1000m
+            memory: "500Mi"
           requests:
             cpu: 200m
             memory: "100Mi"
