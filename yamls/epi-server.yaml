@@ -32,6 +32,6 @@ spec:
     spec:
       containers:
       - name: epi-server
-        image: kennethreitz/httpbin
+        image: melamin/httpbin:v0.0.1
         ports:
         - containerPort: 80

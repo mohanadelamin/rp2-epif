@@ -19,7 +19,8 @@ RUN apt-get install -y \
     iptables \
     tcpdump \
     curl \
-    net-tools
+    net-tools \
+    dnsutils 
 
 RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
 RUN python2 get-pip.py
