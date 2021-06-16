@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
       - name: epi-firewall
-        image: melamin/epi_vnf_firewall:v0.0.3
+        image: pimpaardekooper/vnf_instances:firewall
         imagePullPolicy: Always
         envFrom:
         - configMapRef:

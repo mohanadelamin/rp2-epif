@@ -1,3 +1,4 @@
+# First do vpa_start.sh in the root
 ---
 apiVersion: "autoscaling.k8s.io/v1"
 kind: VerticalPodAutoscaler

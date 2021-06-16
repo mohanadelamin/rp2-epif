@@ -10,7 +10,7 @@ import threading
 from socket import AF_INET, SOCK_STREAM, socket, gethostbyname, gethostname
 from socketserver import BaseServer, StreamRequestHandler, ThreadingTCPServer
 from flask import Flask, request
-
+import time 
 # https://github.com/fengyouchao/pysocks
 
 
@@ -222,10 +222,17 @@ class ReplyType:
 class BCF:
     """BCF Bridging function chain"""
 
-    def __init__(self, server_socket, chain=0):
+    def __init__(self, chain=0, buffer_size=1024*1024):
         FW_SVC=os.environ.get("EPI_VNF_FW")
         FW_SVC_PORT=os.environ.get("EPI_VNF_FW_PORT", 5000)
         self.VNF_cluster_IPs = {"firewall": gethostbyname(FW_SVC) + ":" + FW_SVC_PORT}
+        self.server_port = -1
+        self.buffer_size = buffer_size
+        self.server_thread = None
+        self.client_socket = None
+        self.client_port = -1
+        self.connection = None
+
 
         print("[BCF] get peername")
 
@@ -233,79 +240,120 @@ class BCF:
         hostname = gethostname()
 
         self.src = gethostbyname(hostname)
-        self.sport = server_socket.getsockname()[1]
 
-        print(f"[BCF] peername is src,port={self.src},{self.sport}")
+        print(f"[BCF] peername is src,port={self.src}")
+        
+        # Start server
+        self.server()
+        # self.create_iptables()
+        # time.sleep(1)
+
+
+    def client(self):
+        """Creates client socket to the server port of this BCF"""
+        s = socket(AF_INET, SOCK_STREAM)
+        s.connect((self.src, self.server_port))
+        self.client_socket = s
+        self.client_port = s.getsockname()[1]
+
+    def client_send(self, data):
+        """Send all data to the server of this BCF"""
+        with open("client", "w") as f:
+            f.write("[Client] sendall")
+            self.client_socket.sendall(data)
+            f.write("[Client] stop sending")
+
+    def server(self):
+        """BCF server
+
+        Creates a server socket on a random port, which is saved. It then
+        puts the server in a thread.
+        """
+        s = socket(AF_INET, SOCK_STREAM)
+        s.bind((self.src, 0))
+        self.server_port = s.getsockname()[1]
+        print(f"[BCF.server] Internal client server on port {self.server_port}")
+        s.listen(1)
+        print(f"[BCF.server] start client ")
+        self.client()
+        print(f"[BCF.server] accept client ")
+        conn, addr = s.accept()
+        self.connection = conn
+
+        # with conn:
+        #     print('Connected by', addr)
+        #     while True:
+        #         data = conn.recv(1024)
+        #         if not data:
+        #             break
+        #         conn.sendall(data)
+    
+    def close(self):
+        print("[BCF.close] close everyting.")
+        self.server_socket.close()
+        self.client_socket.close()
+        # self.delete_iptables()
 
 
     def create_iptables(self):
         print("[BCF] create iptables")
 
-        #  iptables -t nat -A OUTPUT --src 10.244.1.84 -j DNAT --to-destination 10.96.0.2
+        # Ipables need to change every connection from this proxy to itself, the source port needs to become 
+        # the destination port. So the VNF can just send it to the other endpoint.
+        # iptables -t nat -A PREROUTING -p tcp -j DNAT --to-destination $EPI_SERVER_VAR:$EPI_SERVER_PORT
 
-        first_rule = (f"iptables -t nat -A OUTPUT -p tcp  "
-                f"--sport {self.sport} --src {self.src} -m state --state NEW,ESTABLISHED,RELATED  -j DNAT "
+        to_firewall_client = (f"iptables -w -t nat -A OUTPUT -p tcp  "
+                f"--dst {self.src} --src {self.src} --sport {self.client_port}  -j DNAT "
                 f"--to-destination {self.VNF_cluster_IPs['firewall']}")
 
-        # log_first_rule = (f"iptables -t nat -A OUTPUT -p tcp "
-        #         f"--sport {self.sport} --src {self.src} -j LOG --log-level info")
+        to_firewall_server = (f"iptables -w -t nat -A OUTPUT -p tcp  "
+                f"--dst {self.src} --src {self.src} --sport {self.server_port}  -j DNAT "
+                f"--to-destination {self.VNF_cluster_IPs['firewall']}")
 
-        print(f"[BCF] first rule {first_rule}")
+        server_vnf_client = (f"iptables -w -t nat -A PREROUTING -p tcp  "
+                f"--dst {self.src} --dport {self.server_port} -j DNAT "
+                f"--to-destination {self.src}:{self.client_port}")
+
+        client_vnf_server = (f"iptables -w -t nat -A PREROUTING -p tcp  "
+                f"--dst {self.src} --dport {self.client_port} -j DNAT "
+                f"--to-destination {self.src}:{self.server_port}")
+
+        print(f"[BCF] first rule {to_firewall_client}")
+        print(f"[BCF] second rule {client_vnf_server}")
+        print(f"[BCF] third rule {server_vnf_client}")
+
 
         # Route traffic through clusterIP of the VNF instance
-        os.system(first_rule)
-
-
-        # second_rule = (f"iptables -t nat -A OUTPUT -p tcp "
-        #         f"--dport {self.sport} --dst {self.src} -j DNAT "
-        #         f"--to-destination {self.VNF_cluster_IPs['firewall']}:{50000}")
-        
-
-
-        # log_second_rule = (f"iptables -t nat -A OUTPUT -p tcp "
-        #         f"--dport {self.sport} --dst {self.src} -j LOG --log-level info")
-
-        # print(f"[BCF] second rule {second_rule}")
-
-        # Route traffic going back to clusterIP of the VNF instance
-        # os.system(second_rule)
-
-
-        # Keeps original intact.
-        # os.system("iptables -t nat -A POSTROUTING -j MASQUERADE")
-        print("[BCF] exit create iptables")
+        os.system(to_firewall_client)
+        os.system(to_firewall_server)
+        os.system(client_vnf_server)
+        os.system(server_vnf_client)
 
 
     def delete_iptables(self):
         print("[BCF] delete iptables")
 
-        first_rule = (f"iptables -t nat -D OUTPUT -p tcp  "
-                f"--sport {self.sport} --src {self.src} -m state --state NEW,ESTABLISHED,RELATED  -j DNAT "
+        # Route traffic through clusterIP of the VNF instance
+        to_firewall = (f"iptables -t nat -D OUTPUT -p tcp  "
+                f"--dst {self.src} --src {self.src} --dport {self.server_port} -j DNAT "
                 f"--to-destination {self.VNF_cluster_IPs['firewall']}")
 
-        # Route traffic through clusterIP of the VNF instance
-        print("[BCF] delete rule", first_rule)
 
-        os.system(first_rule)
+        server_vnf_client = (f"iptables -t nat -D PREROUTING -p tcp  "
+                f"--dst {self.src} --dport {self.server_port} -j DNAT "
+                f"--to-destination {self.src}:{self.client_port}")
 
-        # print("[BCF] second rule")
+        client_vnf_server = (f"iptables -t nat -D PREROUTING -p tcp  "
+                f"--dst {self.src} --dport {self.client_port} -j DNAT "
+                f"--to-destination {self.src}:{self.server_port}")
 
-        # second_rule = (f"iptables -t nat -D OUTPUT -p tcp "
-        #         f"--dport {self.sport} --dst {self.src} -j DNAT "
-        #         f"--to-destination {self.VNF_cluster_IPs['firewall']}:{50000}")
-        
-        # Route traffic going back to clusterIP of the VNF instance
-        # os.system(second_rule)
 
-        # os.system("iptables -t nat -D POSTROUTING -j MASQUERADE")
+        # os.system(to_firewall)
+        # os.system(client_vnf_server)
+        # os.system(server_vnf_client)
 
-    # def create_chain():
-    #     """Creates chain of bridging function, should be given by EPI framework."""
-    #     chains = {0: ["firewall"], 1: ["encryption"], 2: ["firewall", "encryption"]}
 
-    #     return chains[0]
 
-        
 
 class SocketPipe:
     BUFFER_SIZE = 1024 * 1024
@@ -314,16 +362,6 @@ class SocketPipe:
         self._socket1 = socket1
         self._socket2 = socket2
         self.__running = False
-        # ADD iptables and BCF.
-
-        print("[SocketPipe] create BCF")
-        # self.bcf = BCF(self._socket2)
-        print("[SocketPipe] create iptables")
-        
-        # self.bcf.create_iptables()
-
-        print("[SocketPipe] iptables are created")
-
 
         self.t1 = threading.Thread(target=self.__transfer, args=(self._socket1, self._socket2))
         self.t2 = threading.Thread(target=self.__transfer, args=(self._socket2, self._socket1))
@@ -351,12 +389,6 @@ class SocketPipe:
     def stop(self):
         self._socket1.close()
         self._socket2.close()
-
-
-        # DELETE iptables
-        #self.bcf.delete_iptables()
-
-
 
         self.__running = False
 

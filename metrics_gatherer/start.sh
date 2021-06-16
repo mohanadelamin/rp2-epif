@@ -10,8 +10,8 @@ kubectl apply -f prometheus-instance.yaml
 kubectl apply -f manifests
 
 kubectl apply -f epi-configmap.yaml 
-kubectl apply -f ../../yamls/epi-client.yaml
-kubectl apply -f ../../yamls/epi-server.yaml
+kubectl apply -f ../yamls/epi-client.yaml
+kubectl apply -f ../yamls/epi-server.yaml
 kubectl apply -f epi-proxy-custom-metrics-scaler.yaml
 
 #https://github.com/kubernetes-sigs/prometheus-adapter/issues/164
