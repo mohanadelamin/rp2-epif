@@ -9,7 +9,7 @@ spec:
     apiVersion: apps/v1
     name: epi-bf
   minReplicas: 1
-  maxReplicas: 5
+  maxReplicas: 1
   metrics:
   - type: Resource
     resource:
