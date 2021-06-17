@@ -35,3 +35,10 @@ spec:
         image: melamin/httpbin:v0.0.1
         ports:
         - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "500m"
+          limits:
+            memory: "128Mi"
+            cpu: "1000m"
