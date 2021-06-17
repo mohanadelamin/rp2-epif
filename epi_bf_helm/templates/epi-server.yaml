@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: epi-server
+  labels:
+    app: epi-server
+    tier: server
+  namespace: epi
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: epi-server
+    tier: server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: epi-server
+  namespace: epi
+spec:
+  replicas: 1
+  selector:
+   matchLabels:
+    app: epi-server
+  template:
+    metadata:
+      labels:
+        app: epi-server
+        tier: server
+    spec:
+      containers:
+      - name: epi-server
+        image: "{{ .Values.server.image }}"
+        ports:
+        - containerPort: 80
