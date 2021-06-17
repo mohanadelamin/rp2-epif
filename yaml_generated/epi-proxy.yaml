@@ -21,7 +21,7 @@ metadata:
   name: epi-proxy
   namespace: epi
 spec:
-  replicas: REPLICAS
+  replicas: 1
   selector:
    matchLabels:
     app: epi-proxy
@@ -44,8 +44,8 @@ spec:
           privileged: true
         resources:
           limits:
-            cpu: LIMITS_CPU
-            memory: LIMITS_MEM
+            cpu: 1
+            memory: 500Mi
           requests:
-            cpu: REQUEST_CPU
-            memory: REQUEST_MEM
+            cpu: 200m
+            memory: 100Mi

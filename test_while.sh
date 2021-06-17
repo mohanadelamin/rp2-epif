@@ -1,27 +1,35 @@
 #!/bin/bash
 
-PORT_LOCUST=$(kubectl get svc locust | grep -Eo '8089:[0-9]*')
+############################################################################
+#epi-bf-hpa
+BF_HPA_MIN_REPLICAS=1
+BF_HPA_UTILIZATION=30
+BF_HPA_MAX_REPLICAS=1
+BF_HPA_SCALABLE_RESOURCE=cpu
 
-PORT_LOCUST_T=$(kubectl get svc locust | grep -Eo '8089:[0-9]*')
 
-IFS=":"
-read -ra array <<<"${PORT_LOCUST_T}"
+#epi-bf
+BF_LIMITS_CPU="1000m"
+BF_LIMITS_MEM="500Mi"
+BF_REQUEST_CPU="200m"
+BF_REQUEST_MEM="100Mi"
 
-for i in "${array[@]}";
-do
-echo "$i"
-done;
+#epi-server
+SERVER_REPLICAS=1
+SERVER_LIMITS_CPU="1000m"
+SERVER_LIMITS_MEM="500Mi"
+SERVER_REQUEST_CPU="200m"
+SERVER_REQUEST_MEM="100Mi"
 
-PORT_LOCUST=${array[1]}
+#epi-proxy
+PROXY_REPLICAS=1
+PROXY_LIMITS_CPU="1000m"
+PROXY_LIMITS_MEM="500Mi"
+PROXY_REQUEST_CPU="200m"
+PROXY_REQUEST_MEM="100Mi"
 
-URL="http://localhost:${PORT_LOCUST}"
-echo "URL: ${URL}"
-echo "Command: curl --silent --output /dev/stderr --write-out "%\{http_code\}" ${URL}"
-echo -e "\n"
-curl --write-out '%{http_code}' "$URL"
-echo -e "\n"
-STATUS_CODE=$(curl --silent --output /dev/stderr --write-out '%{http_code}' "${URL}")
-echo "http://localhost:${PORT_LOCUST}"
+#############################################################################
+# Start all services wait till they are ready
 
-echo "while loop res: ${STATUS_CODE}"
-
+# Create config files
+cd yaml_configurable/ && . ./make_yamls.sh && cd ../

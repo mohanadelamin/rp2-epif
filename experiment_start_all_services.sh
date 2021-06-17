@@ -3,15 +3,17 @@
 # Add config map for environment variables.
 
 
+
+
 kubectl apply -f yamls/epi-configmap.yaml
 # Deploy the socks5 proxy
-kubectl apply -f yamls/epi-proxy.yaml
+kubectl apply -f yaml_generated/epi-proxy.yaml
 # Deploy the httpbin server
-kubectl apply -f yamls/epi-server.yaml
+kubectl apply -f yaml_generated/epi-server.yaml
 # Deploy the bridging function
-kubectl apply -f yamls/epi-bf.yaml
+kubectl apply -f yaml_generated/epi-bf.yaml
 # Deploy the bridging function HPA
-kubectl apply -f yamls/epi-bf-hpa.yaml
+kubectl apply -f yaml_generated/epi-bf-hpa.yaml
 # Deploy Locust helm chart to repo
 helm repo add deliveryhero https://charts.deliveryhero.io/
 # Locust test script
