@@ -1,0 +1,27 @@
+{{- if .Values.bf_hpa.enabled }}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: epi-bf-hpa
+  namespace: epi
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    apiVersion: apps/v1
+    name: epi-bf
+  minReplicas: {{ .Values.bf_hpa.minReplicas }}
+  maxReplicas: {{ .Values.bf_hpa.maxReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.bf_hpa.cpu_averageUtilization }}
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.bf_hpa.mem_averageUtilization }}
+{{- end }}
