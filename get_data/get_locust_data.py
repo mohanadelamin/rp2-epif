@@ -5,6 +5,14 @@ from bs4 import BeautifulSoup
 import demjson
 import pandas as pd
 import os
+import sys
+
+if len(sys.argv) < 2:
+    print("give filename")
+    exit(1)
+
+output_dir = sys.argv[1]
+
 
 port = os.popen("kubectl get svc locust | grep -Eo '8089:[0-9]*'").read()
 port = port.split(":")[1]
@@ -37,4 +45,4 @@ for y in x["current_rps"]:
 
 dataframe = {'users': users, 'values': values, 'time': x["time"]}
 df = pd.DataFrame(data=dataframe)
-df.to_csv("locust_data.csv")
+df.to_csv(f"{output_dir}locust_data.csv")
