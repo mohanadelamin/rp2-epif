@@ -40,11 +40,16 @@ do
     BF_CPU_LIMIT=${test_array[6]}
     BF_MEM_LIMIT=${test_array[7]}
 
+
+
     echo "Running Test number ${TEST_NO}"
     NOW=$( date '+%Y%m%d%H%M%S' )
     TEST_DIR="${OUTPUT_DIR}/TEST_NO_${TEST_NO}_${NOW}"
     echo "Creating Directory ${TEST_DIR}"
     mkdir ${TEST_DIR}
+    
+    echo "${BF_CPU_LIMIT},0,${BF_MEM_LIMIT},0" > "${TEST_DIR}/bf_milicore.txt"
+
 
     echo "Start Worker node monitoring"
     sudo python3 scripts/xen_vm_stats.py ${TEST_DIR} 1>/dev/null 2>/dev/null &
