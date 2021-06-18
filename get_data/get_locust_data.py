@@ -38,11 +38,18 @@ with open('data.txt', 'w') as outfile:
 
 values = []
 users = []
+fails = []
 
 for y in x["current_rps"]:
     users.append(y['users'])
     values.append(y['value'])
 
-dataframe = {'users': users, 'values': values, 'time': x["time"]}
+
+for y in x["current_fail_per_sec"]:
+    fails.append(y['value'])
+
+
+
+dataframe = {'users': users, 'values': values, 'time': x["time"], "fails": fails}
 df = pd.DataFrame(data=dataframe)
 df.to_csv(f"{output_dir}locust_data.csv")

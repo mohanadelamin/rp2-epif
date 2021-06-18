@@ -33,7 +33,7 @@ DIRECTORY="../yaml_generated"
 mkdir ${DIRECTORY}
 
 echo "bf ${BF_HPA_MIN_REPLICAS}"
-
+echo "directory: ${DIRECTORY}/${NAME}"
 
 # Variables epi-bf-hpa
 MIN_REPLICAS=${BF_HPA_MIN_REPLICAS}
@@ -55,6 +55,7 @@ do
 	template=$(echo "${template}" | sed "s/${var}/${array[$var]}/g")
 done
 
+echo "template > ${DIRECTORY}/${NAME}"
 echo "${template}" > "${DIRECTORY}/${NAME}"
 
 # Create yaml file for epi-bf
@@ -84,11 +85,12 @@ echo "${template}" > "${DIRECTORY}/${NAME}"
 # Create yaml file for epi-proxy.yaml
 
 REPLICAS=${PROXY_REPLICAS}
-LIMITS_CPU=${PROXY_REPLICAS}
+LIMITS_CPU=${PROXY_LIMITS_CPU}
 LIMITS_MEM=${PROXY_LIMITS_MEM}
 REQUEST_CPU=${PROXY_REQUEST_CPU}
 REQUEST_MEM=${PROXY_REQUEST_MEM}
 NAME="epi-proxy.yaml"
+
 
 declare -A array=( ["REPLICAS"]=${REPLICAS} ["LIMITS_CPU"]=${LIMITS_CPU} ["LIMITS_MEM"]=${LIMITS_MEM} ["REQUEST_CPU"]=${REQUEST_CPU} ["REQUEST_MEM"]=${REQUEST_MEM} )
 
@@ -106,7 +108,7 @@ echo "${template}" > "${DIRECTORY}/${NAME}"
 # Create yaml file for epi-server.yaml
 
 REPLICAS=${SERVER_REPLICAS}
-LIMITS_CPU=${SERVER_REPLICAS}
+LIMITS_CPU=${SERVER_LIMITS_CPU}
 LIMITS_MEM=${SERVER_LIMITS_MEM}
 REQUEST_CPU=${SERVER_REQUEST_CPU}
 REQUEST_MEM=${SERVER_REQUEST_MEM}
