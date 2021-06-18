@@ -2,9 +2,9 @@
 LAST_FILE=$(ls -1v get_data/data | tail -1)
 INDEX=$((${LAST_FILE//[!0-9]/} + 1))
 DIR_NAME="get_data/data/data_${INDEX}/"
-NUMBER_OF_USERS=10
-SPAWN_RATE=1
-RUN_TIME=600
+NUMBER_OF_USERS=100
+SPAWN_RATE=5
+RUN_TIME=720
 
 mkdir ${DIR_NAME}
 
@@ -18,9 +18,9 @@ BF_HPA_SCALABLE_RESOURCE=cpu
 
 
 #epi-bf
-BF_LIMITS_CPU="1000m"
+BF_LIMITS_CPU="100m"
 BF_LIMITS_MEM="500Mi"
-BF_REQUEST_CPU="200m"
+BF_REQUEST_CPU="50m"
 BF_REQUEST_MEM="100Mi"
 
 #epi-server
@@ -62,7 +62,7 @@ PORT_LOCUST=${local_p_public_p[1]}
 
 URL="http://localhost:${PORT_LOCUST}"
 echo "URL: ${URL}"
-STATUS_CODE=$(curl --silent --output /dev/stderr --write-out '%{http_code}' "${URL}")
+STATUS_CODE=$(curl --silent --max-time 3 --output /dev/stderr --write-out '%{http_code}' "${URL}")
 echo "http://localhost:${PORT_LOCUST}"
 
 echo "while loop res: ${STATUS_CODE}"
@@ -70,7 +70,7 @@ echo "while loop res: ${STATUS_CODE}"
 # Wait till locust is ready
 while test "${STATUS_CODE}" != "200"; do
 	echo "${URL}"
-	STATUS_CODE=$(curl --silent --output /dev/stderr --write-out '%{http_code}' "${URL}")
+	STATUS_CODE=$(curl --max-time 3 --silent --output /dev/stderr --write-out '%{http_code}' "${URL}")
 	echo "while loop res: ${STATUS_CODE}"
         sleep 2
 done
@@ -87,6 +87,10 @@ while [[ ${timer} -lt ${RUN_TIME} ]];
 do
 	echo "progress: ${timer}/${RUN_TIME}"
 	((timer++))
+	# add 1 user each second
+	NUMBER_OF_USERS=$((${NUMBER_OF_USERS}+10))
+	# echo "${NUMBER_OF_USERS}"
+	python3 locust_start_request.py ${NUMBER_OF_USERS} ${SPAWN_RATE}
 	sleep 1
 done;
 
@@ -97,8 +101,10 @@ done;
 echo "Get data"
 
 ./get_data/get_pim.sh ${DIR_NAME}
-python3 get_data/get_locust_data.py ${DIR_NAME}
+python3 get_data/get_locust_data.py ${DIR_NAME} > /dev/null
+# Write milicore allocated.
+echo "${BF_LIMITS_CPU},${BF_REQUEST_CPU},${BF_LIMITS_MEM},${BF_REQUEST_MEM}" > "${DIR_NAME}/bf_milicore.txt"
 
 
 ./get_data/remove_pim.sh
-# ./stop_all_services.sh
+./stop_all_services.sh
