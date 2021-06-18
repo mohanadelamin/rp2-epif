@@ -10,6 +10,8 @@ iptables -t nat -A OUTPUT ! -d $PROXY_HOST -o eth0 -p tcp ! --dport 5557 -m tcp 
 
 sleep 1s
 
+nohup bash /monitor.sh &
+
 iptables-save
 
 /usr/bin/python3 redirector.py

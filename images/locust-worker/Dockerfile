@@ -28,6 +28,7 @@ RUN pip3 install \
 COPY . /build
 RUN cd /build && pip3 install . && rm -rf /build
 
+ADD monitor.sh monitor.sh
 ADD redirector.py redirector.py
 ADD entrypoint.sh entrypoint.sh
 
