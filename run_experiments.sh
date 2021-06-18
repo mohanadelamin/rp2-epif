@@ -18,8 +18,8 @@ EXPERIMENTS_VARS=$1
 OUTPUT_DIR=$2
 NAMESPACE=$3
 
-BF_IMAGE=pimpaardekooper/vnf_instances:http_filter_no_stress
-#BF_IMAGE="melamin/epi_vnf_http_filter:v0.0.9"
+#BF_IMAGE=pimpaardekooper/vnf_instances:http_filter_no_stress
+BF_IMAGE="melamin/epi_vnf_http_filter:v0.0.9"
 #BF_IMAGE="melamin/epi_vnf_network_monitor:v0.0.9"
 #BF_IMAGE="melamin/epi_vnf_firewall:v0.0.7"
 #PROXY_IMAGE="melamin/epi_proxy:v0.0.3"
@@ -31,7 +31,8 @@ WORKERS=("145.100.110.91" "145.100.110.92")
 
 echo "Reading test variables from ${EXPERIMENTS_VARS}"
 
-while read line
+#while read line
+for line in $(tail -n +2 ${EXPERIMENTS_VARS})
 do
     IFS=',' read -r -a test_array <<< ${line}
     TEST_NO=${test_array[0]}
@@ -159,7 +160,7 @@ do
     done
     echo "Killing the Worker node monitoring script"
     sudo kill -9 $(ps aux | grep xen_vm_stats | grep -v grep | awk '{print $2}')
-
-done < <(tail -n +2 ${EXPERIMENTS_VARS})
+done
+#done < <(tail -n +2 ${EXPERIMENTS_VARS})
 
 echo "All tests are done, generated data available in ${OUTPUT_DIR}"
