@@ -2,12 +2,13 @@
 LAST_FILE=$(ls -1v get_data/data | tail -1)
 INDEX=$((${LAST_FILE//[!0-9]/} + 1))
 DIR_NAME="get_data/data/data_${INDEX}/"
-NUMBER_OF_USERS=100
+NUMBER_OF_USERS=1
 SPAWN_RATE=5
-RUN_TIME=10
+RUN_TIME=600
 
 mkdir ${DIR_NAME}
 
+sudo docker image rm pimpaardekooper/vnf_instances:locust_worker
 
 ############################################################################
 #epi-bf-hpa
@@ -22,6 +23,12 @@ BF_LIMITS_CPU="100m"
 BF_LIMITS_MEM="500Mi"
 BF_REQUEST_CPU="50m"
 BF_REQUEST_MEM="100Mi"
+
+# client
+CLIENT_LIMITS_CPU="1000m"
+CLIENT_LIMITS_MEM="500Mi"
+CLIENT_REQUEST_CPU="200m"
+CLIENT_REQUEST_MEM="100Mi"
 
 #epi-server
 SERVER_REPLICAS=1
@@ -43,7 +50,7 @@ PROXY_REQUEST_MEM="100Mi"
 # Create config files, IMPORTANT dot before /make_yamls.sh give variables
 cd yaml_configurable/ && . ./make_yamls.sh && cd ../
 # Create environment with generated yamls
-./experiment_start_all_services.sh
+. ./experiment_start_all_services.sh
 sleep 2
 
 
@@ -88,8 +95,8 @@ do
 	echo "progress: ${timer}/${RUN_TIME}"
 	((timer++))
 	# add 1 user each second
-	NUMBER_OF_USERS=$((${NUMBER_OF_USERS}+10))
-	# echo "${NUMBER_OF_USERS}"
+	NUMBER_OF_USERS=$((${NUMBER_OF_USERS}+1))
+	echo "${NUMBER_OF_USERS}"
 	python3 locust_start_request.py ${NUMBER_OF_USERS} ${SPAWN_RATE}
 	sleep 1
 done;
@@ -105,7 +112,10 @@ echo "Get data"
 python3 get_data/get_locust_data.py ${DIR_NAME} > /dev/null
 # Write milicore allocated.
 echo "${BF_LIMITS_CPU},${BF_REQUEST_CPU},${BF_LIMITS_MEM},${BF_REQUEST_MEM}" > "${DIR_NAME}/bf_milicore.txt"
+echo "${SERVER_LIMITS_CPU},${SERVER_REQUEST_CPU},${SERVER_LIMITS_MEM},${SERVER_REQUEST_MEM}" >> "${DIR_NAME}/bf_milicore.txt"
+echo "${PROXY_LIMITS_CPU},${PROXY_REQUEST_CPU},${PROXY_LIMITS_MEM},${PROXY_REQUEST_MEM}" >> "${DIR_NAME}/bf_milicore.txt"
+echo "${CLIENT_LIMITS_CPU},${CLIENT_REQUEST_CPU},${CLIENT_LIMITS_MEM},${CLIENT_REQUEST_MEM}" >> "${DIR_NAME}/bf_milicore.txt"
 
 
 ./get_data/remove_pim.sh
-# ./stop_all_services.sh
+./stop_all_services.sh
