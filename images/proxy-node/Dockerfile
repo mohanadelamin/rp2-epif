@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 
 ENV PYTHONUNBUFFERED=1
 
+ADD monitor.sh monitor.sh
 ADD proxy.py proxy.py
 ADD entrypoint.sh entrypoint.sh
 

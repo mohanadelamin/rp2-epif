@@ -32,7 +32,8 @@ spec:
     spec:
       containers:
       - name: epi-server
-        image: melamin/httpbin:v0.0.1
+        image: pimpaardekooper/vnf_instances:server
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
         resources:

@@ -23,7 +23,7 @@ kubectl create configmap loadtest-lib --from-file locust-test/lib/ -n epi
 helm install locust deliveryhero/locust -n epi --set service.type="NodePort" \
 --set loadtest.name=epif-bf-loadtest \
 --set securityContext.privileged=true \
---set worker.image="melamin/locust-worker:v0.0.19" \
+--set worker.image="pimpaardekooper/vnf_instances:locust_worker" \
 --set worker.environment.PROXY_HOST="epi-proxy" \
 --set worker.environment.PROXY_PORT="1080" \
 --set worker.command[0]="bash" \

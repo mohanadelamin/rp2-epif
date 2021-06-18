@@ -14,3 +14,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     sudo \
     dnsutils \
  && rm -rf /var/lib/apt/lists/*
+
+ADD monitor.sh monitor.sh
+ADD entrypoint.sh entrypoint.sh
+
+
+ ENTRYPOINT [ "./entrypoint.sh"]

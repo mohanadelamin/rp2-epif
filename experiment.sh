@@ -4,7 +4,7 @@ INDEX=$((${LAST_FILE//[!0-9]/} + 1))
 DIR_NAME="get_data/data/data_${INDEX}/"
 NUMBER_OF_USERS=100
 SPAWN_RATE=5
-RUN_TIME=720
+RUN_TIME=10
 
 mkdir ${DIR_NAME}
 
@@ -101,10 +101,11 @@ done;
 echo "Get data"
 
 ./get_data/get_pim.sh ${DIR_NAME}
+./get_data/get_monitoring_data.sh ${DIR_NAME}
 python3 get_data/get_locust_data.py ${DIR_NAME} > /dev/null
 # Write milicore allocated.
 echo "${BF_LIMITS_CPU},${BF_REQUEST_CPU},${BF_LIMITS_MEM},${BF_REQUEST_MEM}" > "${DIR_NAME}/bf_milicore.txt"
 
 
 ./get_data/remove_pim.sh
-./stop_all_services.sh
+# ./stop_all_services.sh
