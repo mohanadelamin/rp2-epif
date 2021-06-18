@@ -18,11 +18,14 @@ EXPERIMENTS_VARS=$1
 OUTPUT_DIR=$2
 NAMESPACE=$3
 
+BF_IMAGE=pimpaardekooper/vnf_instances:http_filter_no_stress
 #BF_IMAGE="melamin/epi_vnf_http_filter:v0.0.9"
-BF_IMAGE="melamin/epi_vnf_network_monitor:v0.0.9"
+#BF_IMAGE="melamin/epi_vnf_network_monitor:v0.0.9"
 #BF_IMAGE="melamin/epi_vnf_firewall:v0.0.7"
-PROXY_IMAGE="melamin/epi_proxy:v0.0.3"
-SERVER_IMAGE="melamin/httpbin:v0.0.1"
+#PROXY_IMAGE="melamin/epi_proxy:v0.0.3"
+PROXY_IMAGE="pimpaardekooper/vnf_instances:proxy"
+#SERVER_IMAGE="melamin/httpbin:v0.0.1"
+SERVER_IMAGE="pimpaardekooper/vnf_instances:proxy"
 
 WORKERS=("145.100.110.91" "145.100.110.92")
 
@@ -62,7 +65,9 @@ do
     --set bf.mem_limit=${BF_MEM_LIMIT} \
     --set bf_hpa.maxReplicas=${HPA_MAX_REPLICAS} \
     --set bf_hpa.cpu_averageUtilization=${HPA_UTILIZATION} \
-    --set bf_hpa.mem_averageUtilization=${HPA_UTILIZATION}
+    --set bf_hpa.mem_averageUtilization=${HPA_UTILIZATION} \
+    --set proxy.image=${PROXY_IMAGE} \
+    --set server.image=${SERVER_IMAGE}
 
     # Deploy Locust helm chart to repo
     echo "Deploying Locust load generator"
@@ -144,17 +149,17 @@ do
     echo "Collecting briding function stats"
     for NODE in ${WORKERS[@]}
     do
-        bash scripts/get_bf_stats.sh ${TEST_DIR} ${NODE}
+        bash scripts/get_pods_stats.sh ${TEST_DIR} ${NODE}
     done
 
     echo "Deleting old bridging function logs"
     for NODE in ${WORKERS[@]}
     do
-        bash scripts/rm_bf_stats.sh ${NODE}
+        bash scripts/rm_pods_stats.sh ${NODE}
     done
     echo "Killing the Worker node monitoring script"
     sudo kill -9 $(ps aux | grep xen_vm_stats | grep -v grep | awk '{print $2}')
 
-done < <(tail -n +2 $EXPERIMENTS_VARS)
+done < <(tail -n +2 ${EXPERIMENTS_VARS})
 
 echo "All tests are done, generated data available in ${OUTPUT_DIR}"
