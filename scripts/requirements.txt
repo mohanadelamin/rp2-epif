@@ -1,0 +1,4 @@
+demjson
+pandas
+json5
+bs4

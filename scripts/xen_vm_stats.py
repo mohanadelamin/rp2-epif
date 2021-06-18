@@ -9,19 +9,19 @@ from random import randrange
 from subprocess import Popen
 
 # Usage
-# sudo ./xen_vm_stats.py <FILENAME_SUFFIX> <DIR>
+# sudo ./xen_vm_stats.py <DIR>
 delta = 3
 node_list = [
     'k8s-worker-1',
     'k8s-worker-2'
 ]
 
-if sys.argv[2]:
-    output_dir = sys.argv[2]
+if len(sys.argv) > 1:
+    output_dir = sys.argv[1]
 else:
     output_dir = "."
 
-output_file = output_dir + "/vms_stats_" + sys.argv[1] + ".csv"
+output_file = output_dir + "/vms_stats.csv"
 
 if delta is None:
     print('Env has not been set properly')
@@ -47,7 +47,7 @@ def stat():
                 write_output(notif,output_file)
 
 def write_output(data,output_file):
-    print(data)
+    #print(data)
     with open(output_file, 'a') as f:
         f.write(data + '\n')
 
