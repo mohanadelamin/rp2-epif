@@ -124,19 +124,22 @@ do
     echo "Locust is starting, sleeping for 10 seconds"
     sleep 10
     # Start locust test
-    echo "Starting locust request"
-    python3 scripts/locust_start_request.py ${NUMBER_OF_USERS} ${SPAWN_RATE} ${LOCUST_SVC_URL}
-
-    timer=0
-    while [[ ${timer} -lt ${RUN_TIME} ]];
+    for NUMBER_OF_USERS in {10..20}
     do
-        echo "progress: ${timer}/${RUN_TIME}"
-        ((timer++))
-        sleep 1
-    done;
+        echo "Starting locust request"
+        python3 scripts/locust_start_request.py ${NUMBER_OF_USERS} ${SPAWN_RATE} ${LOCUST_SVC_URL}
 
-    echo "Test done, Starting data collection after 5 seconds"
-    sleep 5
+        timer=0
+        while [[ ${timer} -lt ${RUN_TIME} ]];
+        do
+            echo "progress: ${timer}/${RUN_TIME}"
+            ((timer++))
+            sleep 1
+        done;
+
+        echo "Test done, Starting data collection after 5 seconds"
+        sleep 5
+    done
 
     echo "Collecting Locust stats"
     python3 scripts/get_locust_data.py ${TEST_DIR} ${LOCUST_SVC_URL} > /dev/null
