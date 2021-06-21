@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import requests
+import os
 from locust import User, task, between
 from lib.epif_functions import choose_random_page
 
@@ -13,11 +14,11 @@ class WebsiteUser(User):
 
     @task(1)
     def get_index(self):
-        answer = requests.get("/", headers=default_headers)
+        answer = requests.get(os.environ.get("LOCUST_HOST") + "/", headers=default_headers)
 
     @task(3)
     def get_random_page(self):
-        answer = requests.get(choose_random_page(), headers=default_headers)
+        answer = requests.get(os.environ.get("LOCUST_HOST") + choose_random_page(), headers=default_headers)
 
     # @task(1)
     # def get_index(self):
