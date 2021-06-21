@@ -18,6 +18,7 @@ EXPERIMENTS_VARS=$1
 OUTPUT_DIR=$2
 NAMESPACE=$3
 
+SERVICE_TYPE="LoadBalancer"
 #BF_IMAGE=pimpaardekooper/vnf_instances:http_filter_no_stress
 BF_IMAGE="melamin/epi_vnf_http_filter:v0.0.9"
 #BF_IMAGE="melamin/epi_vnf_network_monitor:v0.0.9"
@@ -68,7 +69,8 @@ do
     --set bf_hpa.cpu_averageUtilization=${HPA_UTILIZATION} \
     --set bf_hpa.mem_averageUtilization=${HPA_UTILIZATION} \
     --set proxy.image=${PROXY_IMAGE} \
-    --set server.image=${SERVER_IMAGE}
+    --set server.image=${SERVER_IMAGE} \
+    --set bf.service_type=${SERVICE_TYPE}
 
     # Deploy Locust helm chart to repo
     echo "Deploying Locust load generator"
