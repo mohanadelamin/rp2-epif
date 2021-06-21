@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
-
-import requests
-import os
-from locust import User, task, between
+from locust import HttpUser, task, between
 from lib.epif_functions import choose_random_page
 
 
-default_headers = {'Connection': 'close', 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'}
+default_headers = {'Connection': 'close','User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'}
 
 
-class WebsiteUser(User):
+class WebsiteUser(HttpUser):
     #wait_time = between(1, 2)
 
     @task(1)
     def get_index(self):
-        answer = requests.get(os.environ.get("LOCUST_HOST") + "/", headers=default_headers)
+        self.client.get("/", headers=default_headers)
 
     @task(3)
     def get_random_page(self):
-        answer = requests.get(os.environ.get("LOCUST_HOST") + choose_random_page(), headers=default_headers)
+        self.client.get(choose_random_page(), headers=default_headers)

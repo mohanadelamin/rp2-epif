@@ -14,7 +14,7 @@ helm install epi-bf epi-helm/epi_bf_helm -n epi \
 # Deploy Locust helm chart to repo
 helm repo add deliveryhero https://charts.deliveryhero.io/
 # Locust test script
-kubectl create configmap loadtest-locustfile --from-file locust-test/main.py  -n epi
+kubectl create configmap loadtest-locustfile --from-file locust-test/main.py -n epi
 kubectl create configmap loadtest-lib --from-file locust-test/lib/ -n epi
 # Deploy Locust distrubtuted load tester
 helm install locust deliveryhero/locust -n epi --set service.type="LoadBalancer" \
