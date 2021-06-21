@@ -1,7 +1,15 @@
 #!/bin/bash
 # Deploy EPI PoC Helm
 helm repo add epi-helm https://mohanadelamin.github.io/epi-bf-helm/
-helm install epi-bf epi-helm/epi_bf_helm -n epi
+helm install epi-bf epi-helm/epi_bf_helm -n epi \
+--set bf.image="melamin/epi_vnf_http_filter:v0.0.9" \
+--set bf.cpu_limit="1000" \
+--set bf.mem_limit="500Mi" \
+--set bf_hpa.maxReplicas="5" \
+--set bf_hpa.cpu_averageUtilization="30" \
+--set proxy.image="pimpaardekooper/vnf_instances:proxy" \
+--set server.image="pimpaardekooper/vnf_instances:server" \
+--set bf.service_type="LoadBalancer"
 
 # Deploy Locust helm chart to repo
 helm repo add deliveryhero https://charts.deliveryhero.io/
