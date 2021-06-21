@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from locust import User, task, between, requests
+import requests
+from locust import User, task, between
 from lib.epif_functions import choose_random_page
 
 
