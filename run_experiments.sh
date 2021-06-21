@@ -49,7 +49,7 @@ do
 
     echo "Running Test number ${TEST_NO}"
     NOW=$( date '+%Y%m%d%H%M%S' )
-    TEST_DIR="${OUTPUT_DIR}/TEST_NO_${TEST_NO}_${NOW}"
+    TEST_DIR="${OUTPUT_DIR}/TEST_NO_${TEST_NO}"
     echo "Creating Directory ${TEST_DIR}"
     mkdir ${TEST_DIR}
 
@@ -67,6 +67,7 @@ do
     --set bf.mem_limit=${BF_MEM_LIMIT} \
     --set bf_hpa.maxReplicas=${HPA_MAX_REPLICAS} \
     --set bf_hpa.cpu_averageUtilization=${HPA_UTILIZATION} \
+    --set bf_hpa.mem_averageUtilization="60" \
     --set proxy.image=${PROXY_IMAGE} \
     --set server.image=${SERVER_IMAGE} \
     --set bf.service_type=${SERVICE_TYPE}
@@ -99,6 +100,9 @@ do
     echo "Setup is deploying, sleeping for 10 seconds"
     sleep 10
 
+    # Start HPA monitoring script
+    echo "Start the HPA Monitoring script"
+    bash scripts/hpa_monitor.sh ${TEST_DIR} &
 
     # CHECK if Locust is alive.
     while test -z "${LOCUST_SVC_IP}"
@@ -142,6 +146,9 @@ do
     echo "Collecting Locust stats"
     python3 scripts/get_locust_data.py ${TEST_DIR} ${LOCUST_SVC_URL} > /dev/null
 
+    echo "Killing the HPA monitoring script"
+    sudo kill -9 $(ps aux | grep hpa_monitor | grep -v grep | awk '{print $2}')
+
     echo "Cleaning up setup."
     helm delete epi-bf -n ${NAMESPACE}
     helm delete locust -n ${NAMESPACE}
@@ -159,6 +166,7 @@ do
     do
         bash scripts/rm_pods_stats.sh ${NODE}
     done
+
     echo "Killing the Worker node monitoring script"
     sudo kill -9 $(ps aux | grep xen_vm_stats | grep -v grep | awk '{print $2}')
 done
