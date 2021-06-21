@@ -52,7 +52,7 @@ do
     TEST_DIR="${OUTPUT_DIR}/TEST_NO_${TEST_NO}_${NOW}"
     echo "Creating Directory ${TEST_DIR}"
     mkdir ${TEST_DIR}
-    
+
     echo "${BF_CPU_LIMIT},0,${BF_MEM_LIMIT},0" > "${TEST_DIR}/bf_milicore.txt"
 
 
@@ -67,7 +67,6 @@ do
     --set bf.mem_limit=${BF_MEM_LIMIT} \
     --set bf_hpa.maxReplicas=${HPA_MAX_REPLICAS} \
     --set bf_hpa.cpu_averageUtilization=${HPA_UTILIZATION} \
-    --set bf_hpa.mem_averageUtilization=${HPA_UTILIZATION} \
     --set proxy.image=${PROXY_IMAGE} \
     --set server.image=${SERVER_IMAGE} \
     --set bf.service_type=${SERVICE_TYPE}
