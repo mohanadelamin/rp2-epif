@@ -38,6 +38,7 @@ def stat():
             if node in item:
                 #ts = str(time.time())
                 ts = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%s")
+                print(item)
                 cpu_sec = item.split()[2]
                 cpu = item.split()[3]
                 mem_k = item.split()[4]
@@ -47,7 +48,7 @@ def stat():
                 write_output(notif,output_file)
 
 def write_output(data,output_file):
-    #print(data)
+    print(data)
     with open(output_file, 'a') as f:
         f.write(data + '\n')
 

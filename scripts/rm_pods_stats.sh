@@ -1,6 +1,6 @@
 #!/bin/bash
 # Usage
-# ./rm_bf_stats.sh <WORKER_NODE>
+# ./rm_pods_stats.sh <WORKER_NODE>
 
 if [ $# -eq 0 ]
   then
@@ -10,4 +10,4 @@ fi
 NODE=$1
 
 echo "Removing BF stats from ${NODE}"
-ssh root@${NODE} 'rm /root/epi-bf-*'
+ssh root@${NODE} 'rm /root/epi-*'
