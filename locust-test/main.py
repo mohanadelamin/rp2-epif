@@ -14,6 +14,6 @@ class WebsiteUser(HttpUser):
     def get_index(self):
         self.client.get("/", headers=default_headers)
 
-    @task(3)
-    def get_random_page(self):
-        self.client.get(choose_random_page(), headers=default_headers)
+    # @task(3)
+    # def get_random_page(self):
+    #     self.client.get(choose_random_page(), headers=default_headers)

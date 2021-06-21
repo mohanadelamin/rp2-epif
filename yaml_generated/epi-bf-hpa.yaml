@@ -13,7 +13,7 @@ spec:
   metrics:
   - type: Resource
     resource:
-      name: cpu
+      name: http_requests
       target:
         type: Utilization
         averageUtilization: 30

@@ -11,6 +11,10 @@ spec:
   type: ClusterIP
   ports:
   - port: 1080
+    name: socks
+  - port: 80
+    targetPort: 80
+    name: web
   selector:
     app: epi-proxy
     tier: proxy
@@ -33,13 +37,14 @@ spec:
     spec:
       containers:
       - name: epi-proxy
-        image: pimpaardekooper/vnf_instances:proxy
+        image: pimpaardekooper/vnf_instances:proxy_w_metrics
         imagePullPolicy: Always
         envFrom:
         - configMapRef:
             name: epi-config
         ports:
         - containerPort: 1080
+        - containerPort: 80
         securityContext:
           privileged: true
         resources:

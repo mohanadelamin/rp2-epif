@@ -31,9 +31,6 @@ x = x[:-3] + x[-2:]
 x = x[:-1]
 x = json.loads(x)
 
-with open('data.txt', 'w') as outfile:
-        json.dump(x, outfile)
-
 values = []
 users = []
 

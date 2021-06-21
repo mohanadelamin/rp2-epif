@@ -1,7 +1,7 @@
 #!/bin/bash
 LAST_FILE=$(ls -1v get_data/data | tail -1)
 INDEX=$((${LAST_FILE//[!0-9]/} + 1))
-DIR_NAME="get_data/data_custom/data_${INDEX}/"
+DIR_NAME="get_data/data/data_${INDEX}/"
 NUMBER_OF_USERS=1
 SPAWN_RATE=5
 RUN_TIME=30
@@ -15,14 +15,16 @@ sudo docker image rm pimpaardekooper/vnf_instances:locust_worker
 BF_HPA_MIN_REPLICAS=1
 BF_HPA_UTILIZATION=30
 BF_HPA_MAX_REPLICAS=1
-BF_HPA_SCALABLE_RESOURCE=cpu
-
+# Metric-gatherer-and-hpa
+BF_HPA_SCALABLE_RESOURCE="http_requests"
+TARGET_VALUE="100"
 
 #epi-bf
 BF_LIMITS_CPU="100m"
 BF_LIMITS_MEM="500Mi"
 BF_REQUEST_CPU="50m"
 BF_REQUEST_MEM="100Mi"
+BF_REPLICAS="1"
 
 # client
 CLIENT_LIMITS_CPU="1300m"
@@ -44,15 +46,17 @@ PROXY_LIMITS_MEM="500Mi"
 PROXY_REQUEST_CPU="500m"
 PROXY_REQUEST_MEM="100Mi"
 
+
 #############################################################################
 # Start all services wait till they are ready
 
 # Create config files, IMPORTANT dot before /make_yamls.sh give variables
 cd yaml_configurable/ && . ./make_yamls.sh && cd ../
 # Create environment with generated yamls
+
+
 . ./experiment_custom_metrics_start_all_services.sh
 sleep 2
-
 
 
 PORT_LOCUST_T=$(kubectl get svc locust | grep -Eo '8089:[0-9]*')
@@ -118,4 +122,4 @@ echo "${CLIENT_LIMITS_CPU},${CLIENT_REQUEST_CPU},${CLIENT_LIMITS_MEM},${CLIENT_R
 
 
 ./get_data/remove_pim.sh
-./stop_all_services.sh
+# ./stop_all_services_custom_metrics.sh
