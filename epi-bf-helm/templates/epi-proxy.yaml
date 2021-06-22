@@ -42,3 +42,11 @@ spec:
         - containerPort: 1080
         securityContext:
           privileged: true
+        volumeMounts:
+          - name: bf-pv
+            mountPath: /data
+      volumes:
+        - name: bf-pv
+          hostPath:
+            path: /root
+            type: Directory
