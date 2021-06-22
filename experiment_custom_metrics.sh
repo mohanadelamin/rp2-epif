@@ -1,7 +1,8 @@
 #!/bin/bash
-LAST_FILE=$(ls -1v get_data/data | tail -1)
+OUTPUT_DIR=data_custom
+LAST_FILE=$(ls -1v get_data/${OUTPUT_DIR} | tail -1)
 INDEX=$((${LAST_FILE//[!0-9]/} + 1))
-DIR_NAME="get_data/data/data_${INDEX}/"
+DIR_NAME="get_data/${OUTPUT_DIR}/data_${INDEX}/"
 NUMBER_OF_USERS=1
 SPAWN_RATE=5
 RUN_TIME=30
@@ -13,8 +14,9 @@ sudo docker image rm pimpaardekooper/vnf_instances:locust_worker
 ############################################################################
 #epi-bf-hpa
 BF_HPA_MIN_REPLICAS=1
-BF_HPA_UTILIZATION=30
-BF_HPA_MAX_REPLICAS=1
+# 15 request per second
+BF_HPA_UTILIZATION="15000m"
+BF_HPA_MAX_REPLICAS=5
 # Metric-gatherer-and-hpa
 BF_HPA_SCALABLE_RESOURCE="http_requests"
 TARGET_VALUE="100"
@@ -54,7 +56,6 @@ PROXY_REQUEST_MEM="100Mi"
 cd yaml_configurable/ && . ./make_yamls.sh && cd ../
 # Create environment with generated yamls
 
-
 . ./experiment_custom_metrics_start_all_services.sh
 sleep 2
 
@@ -89,6 +90,10 @@ done
 #############################################################################
 # Start locust test
 
+# Start collecting custom metric
+./get_data/start_getting_custom_metrics.sh ${DIR_NAME} &
+CUSTOM_METRICS_COLLECTOR_PID=$!
+echo "PID custom metrics collector: ${CUSTOM_METRICS_COLLECTOR_PID}"
 
 echo "Start locust request"
 python3 locust_start_request.py ${NUMBER_OF_USERS} ${SPAWN_RATE}
@@ -114,6 +119,9 @@ echo "Get data"
 ./get_data/get_pim.sh ${DIR_NAME}
 ./get_data/get_monitoring_data.sh ${DIR_NAME}
 python3 get_data/get_locust_data.py ${DIR_NAME} > /dev/null
+echo "KILL PID custom metrics collector: ${CUSTOM_METRICS_COLLECTOR_PID}"
+kill -9 "${CUSTOM_METRICS_COLLECTOR_PID}"
+
 # Write milicore allocated.
 echo "${BF_LIMITS_CPU},${BF_REQUEST_CPU},${BF_LIMITS_MEM},${BF_REQUEST_MEM}" > "${DIR_NAME}/bf_milicore.txt"
 echo "${PROXY_LIMITS_CPU},${PROXY_REQUEST_CPU},${PROXY_LIMITS_MEM},${PROXY_REQUEST_MEM}" > "${DIR_NAME}/bf_milicore.txt"
@@ -122,4 +130,4 @@ echo "${CLIENT_LIMITS_CPU},${CLIENT_REQUEST_CPU},${CLIENT_LIMITS_MEM},${CLIENT_R
 
 
 ./get_data/remove_pim.sh
-# ./stop_all_services_custom_metrics.sh
+./stop_all_services_custom_metrics.sh

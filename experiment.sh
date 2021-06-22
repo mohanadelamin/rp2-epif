@@ -12,9 +12,9 @@ sudo docker image rm pimpaardekooper/vnf_instances:locust_worker
 
 ############################################################################
 #epi-bf-hpa
-BF_HPA_MIN_REPLICAS=1
+BF_HPA_MIN_REPLICAS=5
 BF_HPA_UTILIZATION=30
-BF_HPA_MAX_REPLICAS=1
+BF_HPA_MAX_REPLICAS=5
 BF_HPA_SCALABLE_RESOURCE=cpu
 
 
@@ -23,6 +23,7 @@ BF_LIMITS_CPU="100m"
 BF_LIMITS_MEM="500Mi"
 BF_REQUEST_CPU="50m"
 BF_REQUEST_MEM="100Mi"
+BF_REPLICAS=5
 
 # client
 CLIENT_LIMITS_CPU="1300m"
@@ -50,7 +51,7 @@ PROXY_REQUEST_MEM="100Mi"
 # Create config files, IMPORTANT dot before /make_yamls.sh give variables
 cd yaml_configurable/ && . ./make_yamls.sh && cd ../
 # Create environment with generated yamls
-. ./experiment_custom_metrics_start_all_services.sh
+. ./start_all_services.sh
 sleep 2
 
 

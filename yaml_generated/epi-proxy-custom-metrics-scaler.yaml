@@ -1,3 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: epi-bf
+  labels:
+    app: epi-bf
+    tier: proxy
+  namespace: epi
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5000
+  selector:
+    app: epi-bf
+    tier: proxy
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -23,7 +38,7 @@ spec:
     kind: Deployment
     name: epi-bf
   minReplicas: 1
-  maxReplicas: 1
+  maxReplicas: 5
   metrics:
   - type: Object
     object:
@@ -61,7 +76,7 @@ spec:
     metadata:
       labels:
         app: epi-bf
-        tier: bf
+        tier: proxy
     spec:
       containers:
       - name: epi-bf
@@ -81,6 +96,14 @@ spec:
           requests:
             cpu: 50m
             memory: 100Mi
+        volumeMounts:
+          - name: bf-pv
+            mountPath: /mnt
+      volumes:
+        - name: bf-pv
+          hostPath:
+            path: /root
+            type: Directory
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -97,6 +120,7 @@ spec:
         backend:
           serviceName: epi-proxy
           servicePort: 80
+---
 
 # melamin/epi-proxy:v0.01
 # pimpaardekooper/vnf_instances:proxy

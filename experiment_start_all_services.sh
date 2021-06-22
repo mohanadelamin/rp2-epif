@@ -15,6 +15,7 @@ kubectl apply -f yaml_generated/epi-bf.yaml
 # Deploy the bridging function HPA
 kubectl apply -f yaml_generated/epi-bf-hpa.yaml
 # Deploy Locust helm chart to repo
+# Deploy Locust helm chart to repo
 helm repo add deliveryhero https://charts.deliveryhero.io/
 # Locust test script
 kubectl create configmap loadtest-locustfile --from-file locust-test/main.py  -n epi
@@ -31,8 +32,8 @@ helm install locust deliveryhero/locust -n epi --set service.type="NodePort" \
 --set worker.command[1]="/entrypoint.sh" \
 --set loadtest.locust_locustfile_configmap=loadtest-locustfile \
 --set loadtest.locust_lib_configmap=loadtest-lib \
---set worker.resources.limits.cpu=${CLIENT_LIMITS_CPU} \
---set worker.resources.requests.cpu=${CLIENT_REQUEST_CPU} \
+--set worker.resources.limits.cpu="1300m" \
+--set worker.resources.requests.cpu="500m" \
 --set worker.hpa.enabled=true \
 --set worker.hpa.maxReplicas=1 \
 --set worker.hpa.targetCPUUtilizationPercentage=80 \
