@@ -33,11 +33,25 @@ x = json.loads(x)
 
 values = []
 users = []
+fails = []
+response_times_percentile_50 = []
+response_times_percentile_95 = []
 
 for y in x["current_rps"]:
     users.append(y['users'])
     values.append(y['value'])
 
-dataframe = {'users': users, 'values': values, 'time': x["time"]}
+
+for y in x["current_fail_per_sec"]:
+    fails.append(y['value'])
+
+for y in x["response_time_percentile_50"]:
+    response_times_percentile_50.append(y['value'])
+
+for y in x["response_time_percentile_95"]:
+    response_times_percentile_95.append(y['value'])
+
+
+dataframe = {'users': users, 'values': values, 'time': x["time"], "fails": fails, "response_time_50": response_times_percentile_50, "response_time_95": response_times_percentile_95}
 df = pd.DataFrame(data=dataframe)
 df.to_csv(f"{output_dir}/locust_data.csv")

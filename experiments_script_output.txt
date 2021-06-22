@@ -1,11 +1,11 @@
 Reading test variables from usecases_test_vars.csv
 Running Test number 1
-Creating Directory hpa_test_data/TEST_NO_1_20210618195826
+Creating Directory hpa_test_data/TEST_NO_1_20210621134948
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Fri Jun 18 19:58:35 2021
+LAST DEPLOYED: Mon Jun 21 13:49:57 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -15,7 +15,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Fri Jun 18 19:58:45 2021
+LAST DEPLOYED: Mon Jun 21 13:50:08 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -28,14 +28,14 @@ NOTES:
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
 Checking for Locust Serivce IP and Port
-Locust service URL is http://145.100.110.93:8089
+Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
 Locust not ready yet, checking again!
 Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
-http://145.100.110.93:8089/swarm
+http://145.100.110.82:8089/swarm
 <Response [200]>
 progress: 0/100
 progress: 1/100
@@ -145,19 +145,19 @@ release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_1_20210618195826
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_1_20210618195826
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_1_20210621134948
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_1_20210621134948
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
 Running Test number 2
-Creating Directory hpa_test_data/TEST_NO_2_20210618200138
+Creating Directory hpa_test_data/TEST_NO_2_20210621135254
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Fri Jun 18 20:01:44 2021
+LAST DEPLOYED: Mon Jun 21 13:53:05 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -167,7 +167,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Fri Jun 18 20:01:52 2021
+LAST DEPLOYED: Mon Jun 21 13:53:15 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -179,12 +179,17 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.93:8089
+Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
+Locust not ready yet, checking again!
+Locust not ready yet, checking again!
+Locust not ready yet, checking again!
+Locust not ready yet, checking again!
+Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
-http://145.100.110.93:8089/swarm
+http://145.100.110.82:8089/swarm
 <Response [200]>
 progress: 0/100
 progress: 1/100
@@ -294,19 +299,19 @@ release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_2_20210618200138
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_2_20210618200138
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_2_20210621135254
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_2_20210621135254
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
 Running Test number 3
-Creating Directory hpa_test_data/TEST_NO_3_20210618200421
+Creating Directory hpa_test_data/TEST_NO_3_20210621135614
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Fri Jun 18 20:04:27 2021
+LAST DEPLOYED: Mon Jun 21 13:56:20 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -316,7 +321,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Fri Jun 18 20:04:33 2021
+LAST DEPLOYED: Mon Jun 21 13:56:29 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -328,8 +333,10 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.93:8089
+Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
+Locust not ready yet, checking again!
+Locust not ready yet, checking again!
 Locust not ready yet, checking again!
 Locust not ready yet, checking again!
 Locust not ready yet, checking again!
@@ -337,7 +344,7 @@ Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
-http://145.100.110.93:8089/swarm
+http://145.100.110.82:8089/swarm
 <Response [200]>
 progress: 0/100
 progress: 1/100
@@ -447,19 +454,19 @@ release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_3_20210618200421
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_3_20210618200421
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_3_20210621135614
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_3_20210621135614
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
 Running Test number 4
-Creating Directory hpa_test_data/TEST_NO_4_20210618200735
+Creating Directory hpa_test_data/TEST_NO_4_20210621135936
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Fri Jun 18 20:07:40 2021
+LAST DEPLOYED: Mon Jun 21 13:59:42 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -469,7 +476,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Fri Jun 18 20:07:47 2021
+LAST DEPLOYED: Mon Jun 21 13:59:48 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -481,14 +488,17 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.93:8089
+Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
+Locust not ready yet, checking again!
+Locust not ready yet, checking again!
+Locust not ready yet, checking again!
 Locust not ready yet, checking again!
 Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
-http://145.100.110.93:8089/swarm
+http://145.100.110.82:8089/swarm
 <Response [200]>
 progress: 0/100
 progress: 1/100
@@ -598,19 +608,19 @@ release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_4_20210618200735
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_4_20210618200735
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_4_20210621135936
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_4_20210621135936
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
 Running Test number 5
-Creating Directory hpa_test_data/TEST_NO_5_20210618201031
+Creating Directory hpa_test_data/TEST_NO_5_20210621140256
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Fri Jun 18 20:10:36 2021
+LAST DEPLOYED: Mon Jun 21 14:03:03 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -620,7 +630,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Fri Jun 18 20:10:42 2021
+LAST DEPLOYED: Mon Jun 21 14:03:13 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -632,17 +642,15 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.93:8089
+Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
 Locust not ready yet, checking again!
 Locust not ready yet, checking again!
 Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
-http://145.100.110.93:8089/swarm
+http://145.100.110.82:8089/swarm
 <Response [200]>
 progress: 0/100
 progress: 1/100
@@ -752,19 +760,19 @@ release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_5_20210618201031
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_5_20210618201031
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_5_20210621140256
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_5_20210621140256
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
 Running Test number 6
-Creating Directory hpa_test_data/TEST_NO_6_20210618201343
+Creating Directory hpa_test_data/TEST_NO_6_20210621140603
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Fri Jun 18 20:13:49 2021
+LAST DEPLOYED: Mon Jun 21 14:06:09 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -774,7 +782,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Fri Jun 18 20:13:57 2021
+LAST DEPLOYED: Mon Jun 21 14:06:17 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -786,16 +794,12 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.93:8089
+Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
-http://145.100.110.93:8089/swarm
+http://145.100.110.82:8089/swarm
 <Response [200]>
 progress: 0/100
 progress: 1/100
@@ -905,19 +909,19 @@ release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_6_20210618201343
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_6_20210618201343
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_6_20210621140603
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_6_20210621140603
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
 Running Test number 7
-Creating Directory hpa_test_data/TEST_NO_7_20210618201652
+Creating Directory hpa_test_data/TEST_NO_7_20210621140851
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Fri Jun 18 20:16:57 2021
+LAST DEPLOYED: Mon Jun 21 14:08:56 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -927,7 +931,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Fri Jun 18 20:17:07 2021
+LAST DEPLOYED: Mon Jun 21 14:09:14 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -939,13 +943,13 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.93:8089
+Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
 Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
-http://145.100.110.93:8089/swarm
+http://145.100.110.82:8089/swarm
 <Response [200]>
 progress: 0/100
 progress: 1/100
@@ -1055,19 +1059,19 @@ release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_7_20210618201652
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_7_20210618201652
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_7_20210621140851
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_7_20210621140851
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
 Running Test number 8
-Creating Directory hpa_test_data/TEST_NO_8_20210618201950
+Creating Directory hpa_test_data/TEST_NO_8_20210621141152
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Fri Jun 18 20:19:56 2021
+LAST DEPLOYED: Mon Jun 21 14:11:58 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -1077,7 +1081,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Fri Jun 18 20:20:07 2021
+LAST DEPLOYED: Mon Jun 21 14:12:09 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -1089,14 +1093,12 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.93:8089
+Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
-http://145.100.110.93:8089/swarm
+http://145.100.110.82:8089/swarm
 <Response [200]>
 progress: 0/100
 progress: 1/100
@@ -1206,19 +1208,19 @@ release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_8_20210618201950
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_8_20210618201950
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_8_20210621141152
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_8_20210621141152
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
 Running Test number 9
-Creating Directory hpa_test_data/TEST_NO_9_20210618202250
+Creating Directory hpa_test_data/TEST_NO_9_20210621141444
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Fri Jun 18 20:22:55 2021
+LAST DEPLOYED: Mon Jun 21 14:14:50 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -1228,7 +1230,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Fri Jun 18 20:23:06 2021
+LAST DEPLOYED: Mon Jun 21 14:14:56 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -1240,13 +1242,15 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.93:8089
+Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
+Locust not ready yet, checking again!
+Locust not ready yet, checking again!
 Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
-http://145.100.110.93:8089/swarm
+http://145.100.110.82:8089/swarm
 <Response [200]>
 progress: 0/100
 progress: 1/100
@@ -1356,19 +1360,19 @@ release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_9_20210618202250
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_9_20210618202250
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_9_20210621141444
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_9_20210621141444
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
 Running Test number 10
-Creating Directory hpa_test_data/TEST_NO_10_20210618202550
+Creating Directory hpa_test_data/TEST_NO_10_20210621141753
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Fri Jun 18 20:25:56 2021
+LAST DEPLOYED: Mon Jun 21 14:18:02 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -1378,7 +1382,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Fri Jun 18 20:26:07 2021
+LAST DEPLOYED: Mon Jun 21 14:18:12 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -1390,12 +1394,12 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.93:8089
+Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
-http://145.100.110.93:8089/swarm
+http://145.100.110.82:8089/swarm
 <Response [200]>
 progress: 0/100
 progress: 1/100
@@ -1505,19 +1509,19 @@ release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_10_20210618202550
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_10_20210618202550
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_10_20210621141753
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_10_20210621141753
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
 Running Test number 11
-Creating Directory hpa_test_data/TEST_NO_11_20210618202842
+Creating Directory hpa_test_data/TEST_NO_11_20210621142046
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Fri Jun 18 20:28:53 2021
+LAST DEPLOYED: Mon Jun 21 14:20:50 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -1527,7 +1531,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Fri Jun 18 20:29:14 2021
+LAST DEPLOYED: Mon Jun 21 14:20:57 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -1539,15 +1543,12 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.93:8089
+Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
-http://145.100.110.93:8089/swarm
+http://145.100.110.82:8089/swarm
 <Response [200]>
 progress: 0/100
 progress: 1/100
@@ -1657,19 +1658,19 @@ release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_11_20210618202842
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_11_20210618202842
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_11_20210621142046
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_11_20210621142046
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
 Running Test number 12
-Creating Directory hpa_test_data/TEST_NO_12_20210618203208
+Creating Directory hpa_test_data/TEST_NO_12_20210621142331
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Fri Jun 18 20:32:14 2021
+LAST DEPLOYED: Mon Jun 21 14:23:37 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -1679,7 +1680,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Fri Jun 18 20:32:21 2021
+LAST DEPLOYED: Mon Jun 21 14:23:43 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -1691,12 +1692,12 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.93:8089
+Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
-http://145.100.110.93:8089/swarm
+http://145.100.110.82:8089/swarm
 <Response [200]>
 progress: 0/100
 progress: 1/100
@@ -1806,19 +1807,19 @@ release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_12_20210618203208
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_12_20210618203208
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_12_20210621142331
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_12_20210621142331
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
 Running Test number 13
-Creating Directory hpa_test_data/TEST_NO_13_20210618203500
+Creating Directory hpa_test_data/TEST_NO_13_20210621142620
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Fri Jun 18 20:35:08 2021
+LAST DEPLOYED: Mon Jun 21 14:26:25 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -1828,7 +1829,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Fri Jun 18 20:35:18 2021
+LAST DEPLOYED: Mon Jun 21 14:26:33 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -1840,13 +1841,12 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.93:8089
+Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
-Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
-http://145.100.110.93:8089/swarm
+http://145.100.110.82:8089/swarm
 <Response [200]>
 progress: 0/100
 progress: 1/100
@@ -1956,19 +1956,19 @@ release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_13_20210618203500
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_13_20210618203500
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_13_20210621142620
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_13_20210621142620
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
 Running Test number 14
-Creating Directory hpa_test_data/TEST_NO_14_20210618203759
+Creating Directory hpa_test_data/TEST_NO_14_20210621142904
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Fri Jun 18 20:38:06 2021
+LAST DEPLOYED: Mon Jun 21 14:29:10 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -1978,7 +1978,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Fri Jun 18 20:38:17 2021
+LAST DEPLOYED: Mon Jun 21 14:29:16 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -1990,12 +1990,16 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.93:8089
+Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
+Locust not ready yet, checking again!
+Locust not ready yet, checking again!
+Locust not ready yet, checking again!
+Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
-http://145.100.110.93:8089/swarm
+http://145.100.110.82:8089/swarm
 <Response [200]>
 progress: 0/100
 progress: 1/100
@@ -2105,19 +2109,19 @@ release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_14_20210618203759
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_14_20210618203759
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_14_20210621142904
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_14_20210621142904
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
 Running Test number 15
-Creating Directory hpa_test_data/TEST_NO_15_20210618204053
+Creating Directory hpa_test_data/TEST_NO_15_20210621143207
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Fri Jun 18 20:40:59 2021
+LAST DEPLOYED: Mon Jun 21 14:32:14 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -2127,7 +2131,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Fri Jun 18 20:41:11 2021
+LAST DEPLOYED: Mon Jun 21 14:32:21 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -2139,16 +2143,14 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.93:8089
+Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
 Locust not ready yet, checking again!
 Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
-http://145.100.110.93:8089/swarm
+http://145.100.110.82:8089/swarm
 <Response [200]>
 progress: 0/100
 progress: 1/100
@@ -2258,19 +2260,19 @@ release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_15_20210618204053
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_15_20210618204053
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_15_20210621143207
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_15_20210621143207
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
 Running Test number 16
-Creating Directory hpa_test_data/TEST_NO_16_20210618204412
+Creating Directory hpa_test_data/TEST_NO_16_20210621143515
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Fri Jun 18 20:44:17 2021
+LAST DEPLOYED: Mon Jun 21 14:35:20 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -2280,7 +2282,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Fri Jun 18 20:44:25 2021
+LAST DEPLOYED: Mon Jun 21 14:35:28 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -2292,7 +2294,7 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.93:8089
+Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
 Locust not ready yet, checking again!
 Locust not ready yet, checking again!
@@ -2300,7 +2302,7 @@ Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
-http://145.100.110.93:8089/swarm
+http://145.100.110.82:8089/swarm
 <Response [200]>
 progress: 0/100
 progress: 1/100
@@ -2410,8 +2412,8 @@ release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_16_20210618204412
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_16_20210618204412
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_16_20210621143515
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_16_20210621143515
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
