@@ -6,11 +6,13 @@ helm install epi-bf epi-helm/epi_bf_helm -n epi \
 --set bf.cpu_limit="1000" \
 --set bf.mem_limit="500Mi" \
 --set bf_hpa.maxReplicas="5" \
---set bf_hpa.cpu_averageUtilization="30" \
+--set bf_hpa.cpu_averageUtilization="80" \
 --set bf_hpa.mem_averageUtilization="60" \
 --set proxy.image="pimpaardekooper/vnf_instances:proxy" \
 --set server.image="pimpaardekooper/vnf_instances:server" \
---set bf.service_type="ClusterIP"
+--set bf.service_type="ClusterIP" \
+--set bf_hpa.enabled=false \
+--set bf_custom_hpa.enabled=False
 
 # Deploy Locust helm chart to repo
 helm repo add deliveryhero https://charts.deliveryhero.io/
