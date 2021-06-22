@@ -58,6 +58,18 @@ do
 
     echo "Start Worker node monitoring"
     sudo python3 scripts/xen_vm_stats.py ${TEST_DIR} 1>/dev/null 2>/dev/null &
+
+    # NOTE: need to be in manifests folder to generate keys
+    cd metrics_gatherer/manifests
+    ./gencerts.sh
+    ./deploy.sh
+    cd ../../
+
+    # Deploy prometheus 
+    kubectl apply -f metrics_gatherer/bundle.yaml 
+    kubectl apply -f metrics_gatherer/prometheus-instance.yaml
+    kubectl apply -f metrics_gatherer/manifests
+
     # Deploy EPI PoC Helm
     echo "Deploying the Briding function, Proxy, and Server"
     helm repo add epi-helm https://mohanadelamin.github.io/epi-bf-helm/

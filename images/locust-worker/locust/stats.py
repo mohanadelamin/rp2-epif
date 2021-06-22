@@ -32,7 +32,7 @@ CSV_STATS_FLUSH_INTERVAL_SEC = 10
 Default window size/resolution - in seconds - when calculating the current
 response time percentile
 """
-CURRENT_RESPONSE_TIME_PERCENTILE_WINDOW = 10
+CURRENT_RESPONSE_TIME_PERCENTILE_WINDOW = 1
 
 
 CachedResponseTimes = namedtuple("CachedResponseTimes", ["response_times", "num_requests"])

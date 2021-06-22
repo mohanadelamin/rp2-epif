@@ -131,14 +131,24 @@ do
     # Start locust test
     echo "Starting locust request"
     python3 scripts/locust_start_request.py ${NUMBER_OF_USERS} ${SPAWN_RATE} ${LOCUST_SVC_URL}
-
-    timer=0
-    while [[ ${timer} -lt ${RUN_TIME} ]];
-    do
-        echo "progress: ${timer}/${RUN_TIME}"
-        ((timer++))
-        sleep 1
-    done;
+    
+    COUNTER=0
+    MAX_PODS=10
+    
+    while [  $COUNTER -lt ${MAX_PODS} ]; do
+        sleep 60
+        kubectl scale --replicas=1 deployment/epi-bf -n epi
+        let COUNTER=COUNTER+1 
+    done
+    # deploy extra pod
+    
+    # timer=0
+    # while [[ ${timer} -lt ${RUN_TIME} ]];
+    # do
+    #     echo "progress: ${timer}/${RUN_TIME}"
+    #     ((timer++))
+    #     sleep 1
+    # done;
 
     echo "Test done, Starting data collection after 5 seconds"
     sleep 5

@@ -5,7 +5,7 @@ INDEX=$((${LAST_FILE//[!0-9]/} + 1))
 DIR_NAME="get_data/${OUTPUT_DIR}/data_${INDEX}/"
 NUMBER_OF_USERS=1
 SPAWN_RATE=5
-RUN_TIME=30
+RUN_TIME=100
 
 mkdir ${DIR_NAME}
 
@@ -130,4 +130,4 @@ echo "${CLIENT_LIMITS_CPU},${CLIENT_REQUEST_CPU},${CLIENT_LIMITS_MEM},${CLIENT_R
 
 
 ./get_data/remove_pim.sh
-./stop_all_services_custom_metrics.sh
+# ./stop_all_services_custom_metrics.sh
