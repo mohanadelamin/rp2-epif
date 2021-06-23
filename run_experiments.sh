@@ -174,6 +174,9 @@ do
         bash scripts/get_pods_stats.sh ${TEST_DIR} ${NODE}
     done
 
+    echo "Collecting worker response times file"
+    ./scripts/get_response_time_worker.sh ${TEST_DIR}
+    
     echo "Deleting old bridging function logs"
     for NODE in ${WORKERS[@]}
     do
