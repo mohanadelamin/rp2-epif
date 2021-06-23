@@ -30,7 +30,7 @@ SERVER_IMAGE="pimpaardekooper/vnf_instances:server"
 LOCUST_WORKER_IMAGE="pimpaardekooper/vnf_instances:locust_worker"
 
 # LOCUST_WORKER_IMAGE="melamin/locust-worker:v0.0.19"
-WORKERS=("145.100.110.91" "145.100.110.92")
+# WORKERS=("145.100.110.91" "145.100.110.92")
 WORKERS=("145.100.106.194" "145.100.106.195")
 
 echo "Reading test variables from ${EXPERIMENTS_VARS}"
@@ -159,6 +159,9 @@ do
     echo "Collecting Locust stats"
     python3 scripts/get_locust_data.py ${TEST_DIR} ${LOCUST_SVC_URL} > /dev/null
 
+    echo "Collecting worker response times file"
+    ./scripts/get_response_time_worker.sh ${TEST_DIR}
+    exit 
     echo "Killing the HPA monitoring script"
     sudo kill -9 $(ps aux | grep hpa_monitor | grep -v grep | awk '{print $2}')
 
@@ -174,8 +177,7 @@ do
         bash scripts/get_pods_stats.sh ${TEST_DIR} ${NODE}
     done
 
-    echo "Collecting worker response times file"
-    ./scripts/get_response_time_worker.sh ${TEST_DIR}
+
     
     echo "Deleting old bridging function logs"
     for NODE in ${WORKERS[@]}
