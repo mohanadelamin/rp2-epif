@@ -32,10 +32,10 @@ spec:
     spec:
       containers:
       - name: epi-bf
-        #image: melamin/epi_vnf_http_filter:v0.0.9
+        image: melamin/epi_vnf_http_filter:v0.0.9
         # image: melamin/epi_vnf_network_monitor:v0.0.9
         #image: melamin/epi_vnf_firewall:v0.0.7
-        image: pimpaardekooper/vnf_instances:http_filter
+        # image: pimpaardekooper/vnf_instances:http_filter
         imagePullPolicy: Always
         envFrom:
         - configMapRef:

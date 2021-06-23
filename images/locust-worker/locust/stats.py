@@ -289,7 +289,7 @@ class StatsEntry:
         t = int(current_time)
 
         # TODO::
-        print(f"log_request: {t},{response_time}")
+        # print(f"log_request: {t},{response_time}")
         os.system(f"echo '{t},{response_time}' >> /mnt/response_times")
         
         if self.use_response_times_cache and self.last_request_timestamp and t > int(self.last_request_timestamp):

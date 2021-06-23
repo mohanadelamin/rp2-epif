@@ -27,8 +27,11 @@ BF_IMAGE="melamin/epi_vnf_http_filter:v0.0.9"
 PROXY_IMAGE="pimpaardekooper/vnf_instances:proxy"
 #SERVER_IMAGE="melamin/httpbin:v0.0.1"
 SERVER_IMAGE="pimpaardekooper/vnf_instances:server"
+LOCUST_WORKER_IMAGE="pimpaardekooper/vnf_instances:locust_worker"
 
+# LOCUST_WORKER_IMAGE="melamin/locust-worker:v0.0.19"
 WORKERS=("145.100.110.91" "145.100.110.92")
+WORKERS=("145.100.106.194" "145.100.106.195")
 
 echo "Reading test variables from ${EXPERIMENTS_VARS}"
 
@@ -83,7 +86,7 @@ do
     --set service.type="LoadBalancer" \
     --set loadtest.name=epif-bf-loadtest \
     --set securityContext.privileged=true \
-    --set worker.image="melamin/locust-worker:v0.0.19" \
+    --set worker.image=${LOCUST_WORKER_IMAGE} \
     --set worker.environment.PROXY_HOST="epi-proxy" \
     --set worker.environment.PROXY_PORT="1080" \
     --set worker.command[0]="bash" \
