@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from locust import HttpUser, task, between
+from locust import HttpUser, task, between, constant
 from lib.epif_functions import choose_random_page
 
 
@@ -8,7 +8,7 @@ default_headers = {'Connection': 'close','User-Agent': 'Mozilla/5.0 (Macintosh; 
 
 class WebsiteUser(HttpUser):
     # wait_time = between(1, 2)
-    wait_time = 0.5
+    wait_time = constant(1)
 
     @task(1)
     def get_index(self):
