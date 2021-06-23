@@ -161,7 +161,7 @@ do
 
     echo "Collecting worker response times file"
     ./scripts/get_response_time_worker.sh ${TEST_DIR}
-    exit 
+
     echo "Killing the HPA monitoring script"
     sudo kill -9 $(ps aux | grep hpa_monitor | grep -v grep | awk '{print $2}')
 
