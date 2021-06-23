@@ -35,3 +35,11 @@ spec:
         image: "{{ .Values.server.image }}"
         ports:
         - containerPort: 80
+        volumeMounts:
+          - name: bf-pv
+            mountPath: /data
+      volumes:
+        - name: bf-pv
+          hostPath:
+            path: /root
+            type: Directory

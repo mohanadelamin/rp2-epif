@@ -28,6 +28,10 @@
 #PROXY_REQUEST_CPU="200m"
 #PROXY_REQUEST_MEM="100Mi"
 
+# Metric-gatherer
+# METRIC_NAME="http_requests"
+# TARGET_VALUE="100"
+
 DIRECTORY="../yaml_generated"
 
 mkdir ${DIRECTORY}
@@ -65,6 +69,7 @@ LIMITS_CPU=${BF_LIMITS_CPU}
 LIMITS_MEM=${BF_LIMITS_MEM}
 REQUEST_CPU=${BF_REQUEST_CPU}
 REQUEST_MEM=${BF_REQUEST_MEM}
+
 NAME="epi-bf.yaml"
 #IMAGE="pimpaardekooper\/vnf_instances:http_filter_no_stress"
 
@@ -81,6 +86,48 @@ done
 
 echo "${template}" > "${DIRECTORY}/${NAME}"
 #echo "${template}"
+
+
+# Create yamls custom-metrics
+
+TOTAL_REPLICAS=${BF_REPLICAS}
+LIMITS_CPU=${BF_LIMITS_CPU}
+LIMITS_MEM=${BF_LIMITS_MEM}
+REQUEST_CPU=${BF_REQUEST_CPU}
+REQUEST_MEM=${BF_REQUEST_MEM}
+MIN_REPLICAS=${BF_HPA_MIN_REPLICAS}
+MAX_REPLICAS=${BF_HPA_MAX_REPLICAS}
+SCALABLE_RESOURCE=${BF_HPA_SCALABLE_RESOURCE}
+TARGET_VALUE=${TARGET_VALUE}
+
+NAME="epi-proxy-custom-metrics-scaler.yaml"
+
+# NOTE: make sure REPLICAS is latest as it overlaps with MIN AND MAX REPLICAS
+declare -A array=(  ["LIMITS_CPU"]=${LIMITS_CPU} ["LIMITS_MEM"]=${LIMITS_MEM} ["REQUEST_CPU"]=${REQUEST_CPU} 
+					["REQUEST_MEM"]=${REQUEST_MEM} ["MIN_REPLICAS"]=${MIN_REPLICAS} ["MAX_REPLICAS"]=${MAX_REPLICAS} 
+					["SCALABLE_RESOURCE"]=${SCALABLE_RESOURCE} ["TARGET_VALUE"]=${TARGET_VALUE} ["TOTAL_REPLICAS"]=${TOTAL_REPLICAS} )
+
+template=`cat ${NAME}`
+
+for var in "${!array[@]}"
+do
+	echo "${var}=${array[$var]}"
+	template=$(echo "${template}" | sed "s/${var}/${array[$var]}/g")
+done
+
+echo "${DIRECTORY}/${NAME}"
+
+echo "${template}" > "${DIRECTORY}/${NAME}"
+
+
+
+
+
+
+
+
+
+
 
 # Create yaml file for epi-proxy.yaml
 

@@ -35,7 +35,7 @@ spec:
         #image: melamin/epi_vnf_http_filter:v0.0.9
         # image: melamin/epi_vnf_network_monitor:v0.0.9
         #image: melamin/epi_vnf_firewall:v0.0.7
-        image: pimpaardekooper/vnf_instances:http_filter_no_stress
+        image: pimpaardekooper/vnf_instances:http_filter
         imagePullPolicy: Always
         envFrom:
         - configMapRef:
@@ -44,10 +44,10 @@ spec:
         - containerPort: 5000
         resources:
           limits:
-            cpu: 1000m
+            cpu: 200m
             memory: "500Mi"
           requests:
-            cpu: 200m
+            cpu: 100m
             memory: "100Mi"
         securityContext:
           privileged: true

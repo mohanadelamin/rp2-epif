@@ -1,7 +1,7 @@
 #!/bin/bash
 LAST_FILE=$(ls -1v get_data/data | tail -1)
 INDEX=$((${LAST_FILE//[!0-9]/} + 1))
-DIR_NAME="get_data/data/data_${INDEX}/"
+DIR_NAME="get_data/data_custom/data_${INDEX}/"
 NUMBER_OF_USERS=1
 SPAWN_RATE=5
 RUN_TIME=30
@@ -12,9 +12,9 @@ sudo docker image rm pimpaardekooper/vnf_instances:locust_worker
 
 ############################################################################
 #epi-bf-hpa
-BF_HPA_MIN_REPLICAS=1
+BF_HPA_MIN_REPLICAS=5
 BF_HPA_UTILIZATION=30
-BF_HPA_MAX_REPLICAS=1
+BF_HPA_MAX_REPLICAS=5
 BF_HPA_SCALABLE_RESOURCE=cpu
 
 
@@ -23,6 +23,7 @@ BF_LIMITS_CPU="100m"
 BF_LIMITS_MEM="500Mi"
 BF_REQUEST_CPU="50m"
 BF_REQUEST_MEM="100Mi"
+BF_REPLICAS=5
 
 # client
 CLIENT_LIMITS_CPU="1300m"
@@ -50,7 +51,7 @@ PROXY_REQUEST_MEM="100Mi"
 # Create config files, IMPORTANT dot before /make_yamls.sh give variables
 cd yaml_configurable/ && . ./make_yamls.sh && cd ../
 # Create environment with generated yamls
-. ./experiment_start_all_services.sh
+. ./start_all_services.sh
 sleep 2
 
 
@@ -95,7 +96,7 @@ do
 	echo "progress: ${timer}/${RUN_TIME}"
 	((timer++))
 	# add 1 user each second
-	# NUMBER_OF_USERS=$((${NUMBER_OF_USERS}+5))
+	NUMBER_OF_USERS=$((${NUMBER_OF_USERS}+5))
 	echo "${NUMBER_OF_USERS}"
 	python3 locust_start_request.py ${NUMBER_OF_USERS} ${SPAWN_RATE}
 	sleep 1
@@ -112,9 +113,9 @@ echo "Get data"
 python3 get_data/get_locust_data.py ${DIR_NAME} > /dev/null
 # Write milicore allocated.
 echo "${BF_LIMITS_CPU},${BF_REQUEST_CPU},${BF_LIMITS_MEM},${BF_REQUEST_MEM}" > "${DIR_NAME}/bf_milicore.txt"
-echo "${SERVER_LIMITS_CPU},${SERVER_REQUEST_CPU},${SERVER_LIMITS_MEM},${SERVER_REQUEST_MEM}" >> "${DIR_NAME}/bf_milicore.txt"
-echo "${PROXY_LIMITS_CPU},${PROXY_REQUEST_CPU},${PROXY_LIMITS_MEM},${PROXY_REQUEST_MEM}" >> "${DIR_NAME}/bf_milicore.txt"
-echo "${CLIENT_LIMITS_CPU},${CLIENT_REQUEST_CPU},${CLIENT_LIMITS_MEM},${CLIENT_REQUEST_MEM}" >> "${DIR_NAME}/bf_milicore.txt"
+echo "${PROXY_LIMITS_CPU},${PROXY_REQUEST_CPU},${PROXY_LIMITS_MEM},${PROXY_REQUEST_MEM}" > "${DIR_NAME}/bf_milicore.txt"
+echo "${SERVER_LIMITS_CPU},${SERVER_REQUEST_CPU},${SERVER_LIMITS_MEM},${SERVER_REQUEST_MEM}" > "${DIR_NAME}/bf_milicore.txt"
+echo "${CLIENT_LIMITS_CPU},${CLIENT_REQUEST_CPU},${CLIENT_LIMITS_MEM},${CLIENT_REQUEST_MEM}" > "${DIR_NAME}/bf_milicore.txt"
 
 
 ./get_data/remove_pim.sh

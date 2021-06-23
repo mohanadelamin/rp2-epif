@@ -16,8 +16,12 @@ output_dir = sys.argv[1]
 
 port = os.popen("kubectl get svc locust | grep -Eo '8089:[0-9]*'").read()
 port = port.split(":")[1]
-URL = f'http://localhost:{port}'
+URL = f"http://localhost:{port}"
 page = requests.get(URL)
+URL = URL.replace("\n", "")
+# get report
+print(f"Request: wget {URL}/stats/requests/csv -O {output_dir}locust_stat_report.csv")
+os.system(f"wget {URL}/stats/requests/csv -O {output_dir}locust_stat_report.csv")
 
 soup = BeautifulSoup(page.content, 'html.parser')
 results = soup.find_all('script')
@@ -33,8 +37,6 @@ x = x[:-3] + x[-2:]
 x = x[:-1]
 x = json.loads(x)
 
-with open('data.txt', 'w') as outfile:
-        json.dump(x, outfile)
 
 values = []
 users = []

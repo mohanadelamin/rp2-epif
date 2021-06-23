@@ -10,8 +10,14 @@ kubectl apply -f yamls/epi-proxy.yaml
 kubectl apply -f yamls/epi-server.yaml
 # Deploy the bridging function
 kubectl apply -f yamls/epi-bf.yaml
+
+
+
+# kubectl apply -f yamls/epi-client.yaml
+
+
 # Deploy the bridging function HPA
-kubectl apply -f yamls/epi-bf-hpa.yaml
+# kubectl apply -f yamls/epi-bf-hpa.yaml
 # Deploy Locust helm chart to repo
 helm repo add deliveryhero https://charts.deliveryhero.io/
 # Locust test script
@@ -22,6 +28,7 @@ helm install locust deliveryhero/locust -n epi --set service.type="NodePort" \
 --set loadtest.name=epif-bf-loadtest \
 --set securityContext.privileged=true \
 --set worker.image="pimpaardekooper/vnf_instances:locust_worker" \
+--set master.image="pimpaardekooper/vnf_instances:locust_master" \
 --set image.pullPolicy="Always" \
 --set worker.environment.PROXY_HOST="epi-proxy" \
 --set worker.environment.PROXY_PORT="1080" \
@@ -35,3 +42,4 @@ helm install locust deliveryhero/locust -n epi --set service.type="NodePort" \
 --set worker.hpa.maxReplicas=1 \
 --set worker.hpa.targetCPUUtilizationPercentage=80 \
 --set loadtest.locust_host="http://epi-server"
+

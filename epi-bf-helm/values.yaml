@@ -16,6 +16,13 @@ bf_hpa:
   cpu_averageUtilization: 30
   mem_averageUtilization: 30
 
+bf_custom_hpa:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 5
+  metricName: "http_requests"
+  targetValue: "15000m"
+
 proxy:
   image: melamin/epi_proxy:v0.0.3
 
