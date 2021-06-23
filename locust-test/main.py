@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from locust import HttpUser, task, between
+from locust import HttpUser, task, between, constant
 from lib.epif_functions import choose_random_page
 
 
