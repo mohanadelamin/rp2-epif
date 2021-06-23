@@ -137,7 +137,7 @@ do
     python3 scripts/locust_start_request.py ${NUMBER_OF_USERS} ${SPAWN_RATE} ${LOCUST_SVC_URL}
     
     COUNTER=1
-    MAX_PODS=6
+    MAX_PODS=10
     RUN_TIME=60
 
     
@@ -169,8 +169,9 @@ do
     echo "Collecting Locust stats"
     python3 scripts/get_locust_data.py ${TEST_DIR} ${LOCUST_SVC_URL} > /dev/null
 
+
     echo "Collecting worker response times file"
-    ./scripts/get_response_time_worker.sh ${TEST_DIR}
+    ./scripts/get_response_time_worker.sh ${TEST_DIR} ${NAMESPACE}
 
     echo "Killing the HPA monitoring script"
     # sudo kill -9 $(ps aux | grep hpa_monitor | grep -v grep | awk '{print $2}')
