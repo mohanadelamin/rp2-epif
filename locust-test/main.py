@@ -7,13 +7,14 @@ default_headers = {'Connection': 'close','User-Agent': 'Mozilla/5.0 (Macintosh; 
 
 
 class WebsiteUser(HttpUser):
-    wait_time = between(1, 2)
+    #wait_time = between(1, 2)
+    wait_time = constant(1)
 
     @task(1)
     def get_index(self):
         print("Hello")
         self.client.get("/", headers=default_headers)
 
-    @task(3)
-    def get_random_page(self):
-        self.client.get(choose_random_page(), headers=default_headers)
+#    @task(3)
+#    def get_random_page(self):
+#        self.client.get(choose_random_page(), headers=default_headers)
