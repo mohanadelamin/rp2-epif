@@ -30,8 +30,8 @@ SERVER_IMAGE="pimpaardekooper/vnf_instances:server"
 LOCUST_WORKER_IMAGE="pimpaardekooper/vnf_instances:locust_worker"
 
 # LOCUST_WORKER_IMAGE="melamin/locust-worker:v0.0.19"
-# WORKERS=("145.100.110.91" "145.100.110.92")
-WORKERS=("145.100.106.194" "145.100.106.195")
+WORKERS=("145.100.110.91" "145.100.110.92")
+#WORKERS=("145.100.106.194" "145.100.106.195")
 
 echo "Reading test variables from ${EXPERIMENTS_VARS}"
 
