@@ -31,7 +31,7 @@ LOCUST_WORKER_IMAGE="pimpaardekooper/vnf_instances:locust_worker"
 
 # LOCUST_WORKER_IMAGE="melamin/locust-worker:v0.0.19"
 # WORKERS=("145.100.110.91" "145.100.110.92")
-WORKERS=("145.100.106.194" "145.100.106.195")
+WORKERS=("145.100.106.195" "145.100.106.196")
 
 echo "Reading test variables from ${EXPERIMENTS_VARS}"
 
@@ -136,20 +136,23 @@ do
     echo "Starting locust request"
     python3 scripts/locust_start_request.py ${NUMBER_OF_USERS} ${SPAWN_RATE} ${LOCUST_SVC_URL}
     
-    COUNTER=0
-    MAX_PODS=5
+    COUNTER=1
+    MAX_PODS=6
     RUN_TIME=60
+
     
     while [  $COUNTER -lt ${MAX_PODS} ]; do
+        timer=0
+        kubectl scale --replicas=${COUNTER} deployment/epi-bf -n epi
+        echo "${COUNTER}/${MAX_PODS}"
         while [[ ${timer} -lt ${RUN_TIME} ]];
         do
             echo "progress: ${timer}/${RUN_TIME}"
             ((timer++))
             sleep 1
         done;
-        kubectl scale --replicas=1 deployment/epi-bf -n epi
         let COUNTER=COUNTER+1 
-        echo "${COUNTER}/${MAX_PODS}"
+
     done
     
     # timer=0
