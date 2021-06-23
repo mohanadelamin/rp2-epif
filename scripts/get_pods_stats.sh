@@ -14,4 +14,3 @@ NODE=$2
 
 echo "Copying BF stats from ${NODE} to ${DIR}"
 scp root@${NODE}:/root/epi-* ${DIR}
-scp root@${NODE}:/root/response_times ${DIR}
