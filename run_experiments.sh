@@ -135,20 +135,20 @@ do
     COUNTER=0
     MAX_PODS=10
     
-    while [  $COUNTER -lt ${MAX_PODS} ]; do
-        sleep 60
-        kubectl scale --replicas=1 deployment/epi-bf -n epi
-        let COUNTER=COUNTER+1 
-    done
+    #while [  $COUNTER -lt ${MAX_PODS} ]; do
+    #    sleep 60
+    #    kubectl scale --replicas=1 deployment/epi-bf -n epi
+    #    let COUNTER=COUNTER+1 
+    #done
     # deploy extra pod
     
-    # timer=0
-    # while [[ ${timer} -lt ${RUN_TIME} ]];
-    # do
-    #     echo "progress: ${timer}/${RUN_TIME}"
-    #     ((timer++))
-    #     sleep 1
-    # done;
+    timer=0
+    while [[ ${timer} -lt ${RUN_TIME} ]];
+    do
+        echo "progress: ${timer}/${RUN_TIME}"
+        ((timer++))
+        sleep 1
+    done;
 
     echo "Test done, Starting data collection after 5 seconds"
     sleep 5
@@ -179,6 +179,15 @@ do
 
     echo "Killing the Worker node monitoring script"
     sudo kill -9 $(ps aux | grep xen_vm_stats | grep -v grep | awk '{print $2}')
+
+    echo "Test No. $TEST_NO is done, wait till all pods are terminated"
+
+    while [[ $(kubectl get pods -n epi -o jsonpath='{.items}') != "[]" ]]
+    do
+         echo "Not all pods are terminated yet."
+         sleep 2
+    done
+
 done
 #done < <(tail -n +2 ${EXPERIMENTS_VARS})
 
