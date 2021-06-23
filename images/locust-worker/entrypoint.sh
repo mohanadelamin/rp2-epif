@@ -17,8 +17,8 @@ iptables-save
 /usr/bin/python3 redirector.py
 sleep 1s
 
-# /usr/bin/python3 /usr/local/bin/locust --worker \
-# --locustfile=/mnt/locust/main.py --host=http://epi-server \
-# --master-host=locust --loglevel=INFO
+/usr/bin/python3 /usr/local/bin/locust --worker \
+--locustfile=/mnt/locust/main.py --host=http://epi-server \
+--master-host=locust --loglevel=INFO
 
-/usr/bin/python3 /usr/local/bin/locust --master
+# /usr/bin/python3 /usr/local/bin/locust --master

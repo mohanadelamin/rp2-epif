@@ -28,7 +28,6 @@ helm install locust deliveryhero/locust -n epi --set service.type="NodePort" \
 --set loadtest.name=epif-bf-loadtest \
 --set securityContext.privileged=true \
 --set worker.image="pimpaardekooper/vnf_instances:locust_worker" \
---set master.image="pimpaardekooper/vnf_instances:locust_master" \
 --set image.pullPolicy="Always" \
 --set worker.environment.PROXY_HOST="epi-proxy" \
 --set worker.environment.PROXY_PORT="1080" \
@@ -43,3 +42,4 @@ helm install locust deliveryhero/locust -n epi --set service.type="NodePort" \
 --set worker.hpa.targetCPUUtilizationPercentage=80 \
 --set loadtest.locust_host="http://epi-server"
 
+# --set master.image="pimpaardekooper/vnf_instances:locust_master" \

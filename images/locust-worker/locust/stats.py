@@ -5,6 +5,7 @@ from collections import namedtuple, OrderedDict
 from copy import copy
 from itertools import chain
 import csv
+import os
 
 import gevent
 
@@ -32,7 +33,7 @@ CSV_STATS_FLUSH_INTERVAL_SEC = 10
 Default window size/resolution - in seconds - when calculating the current
 response time percentile
 """
-CURRENT_RESPONSE_TIME_PERCENTILE_WINDOW = 1
+CURRENT_RESPONSE_TIME_PERCENTILE_WINDOW = 10
 
 
 CachedResponseTimes = namedtuple("CachedResponseTimes", ["response_times", "num_requests"])
@@ -265,6 +266,8 @@ class StatsEntry:
 
     def reset(self):
         self.start_time = time.time()
+        self.total_old = 0
+        self.response_time_old = 0
         self.num_requests = 0
         self.num_none_requests = 0
         self.num_failures = 0
@@ -285,6 +288,10 @@ class StatsEntry:
         current_time = time.time()
         t = int(current_time)
 
+        # TODO::
+        print(f"log_request: {t},{response_time}")
+        os.system(f"echo '{t},{response_time}' >> /mnt/response_times")
+        
         if self.use_response_times_cache and self.last_request_timestamp and t > int(self.last_request_timestamp):
             # see if we shall make a copy of the response_times dict and store in the cache
             self._cache_response_times(t - 1)
@@ -305,6 +312,7 @@ class StatsEntry:
         if response_time is None:
             self.num_none_requests += 1
             return
+
 
         self.total_response_time += response_time
 
@@ -442,6 +450,22 @@ class StatsEntry:
             # this means self.min_response_time is None, so we can safely replace it
             self.min_response_time = other.min_response_time
         self.total_content_length = self.total_content_length + other.total_content_length
+
+        # now = time.time()
+        # total = self.num_requests - self.num_none_requests
+
+
+        # if total != 0:
+        #     avg_response = (self.total_response_time - self.total_old)/(total -self.total_old)
+        # else:
+        #     avg_response = 0
+
+        # print(f"response time total {avg_response} time, {now}")
+        # os.system(f"echo '{avg_response},{time}' >> /mnt/response_times")
+
+        # self.total_old = total
+        # self.response_time_old = self.total_response_time
+
 
         for key in other.response_times:
             self.response_times[key] = self.response_times.get(key, 0) + other.response_times[key]
@@ -601,6 +625,8 @@ class StatsEntry:
             response_times=copy(self.response_times),
             num_requests=self.num_requests,
         )
+
+        # os.system(f"echo '{self.response_times_cache[t]},{t}' >> /mnt/response_times.txt")
 
         # We'll use a cache size of CURRENT_RESPONSE_TIME_PERCENTILE_WINDOW + 10 since - in the extreme case -
         # we might still use response times (from the cache) for t-CURRENT_RESPONSE_TIME_PERCENTILE_WINDOW-10
