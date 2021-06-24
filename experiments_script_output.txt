@@ -1,11 +1,11 @@
 Reading test variables from usecases_test_vars.csv
 Running Test number 1
-Creating Directory hpa_test_data/TEST_NO_1_20210621134948
+Creating Directory hpa_test_data/TEST_NO_1
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Mon Jun 21 13:49:57 2021
+LAST DEPLOYED: Wed Jun 23 17:13:51 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -15,7 +15,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Mon Jun 21 13:50:08 2021
+LAST DEPLOYED: Wed Jun 23 17:14:00 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -27,11 +27,13 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
+Start the HPA Monitoring script
 Checking for Locust Serivce IP and Port
 Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
 Locust not ready yet, checking again!
 Locust not ready yet, checking again!
+Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
 Starting locust request
@@ -139,25 +141,47 @@ progress: 98/100
 progress: 99/100
 Test done, Starting data collection after 5 seconds
 Collecting Locust stats
+Collecting worker response times file
+tar: Removing leading `/' from member names
+Killing the HPA monitoring script
+./run_experiments.sh: line 39: 2126243 Killed                  bash scripts/hpa_monitor.sh ${TEST_DIR}
 Cleaning up setup.
 release "epi-bf" uninstalled
 release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_1_20210621134948
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_1_20210621134948
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_1
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_1
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
+./run_experiments.sh: line 39: 2125980 Killed                  sudo python3 scripts/xen_vm_stats.py ${TEST_DIR} > /dev/null 2> /dev/null
+Test No. 1 is done, wait till all pods are terminated
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
 Running Test number 2
-Creating Directory hpa_test_data/TEST_NO_2_20210621135254
+Creating Directory hpa_test_data/TEST_NO_2
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Mon Jun 21 13:53:05 2021
+LAST DEPLOYED: Wed Jun 23 17:17:30 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -167,7 +191,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Mon Jun 21 13:53:15 2021
+LAST DEPLOYED: Wed Jun 23 17:17:38 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -179,6 +203,7 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
+Start the HPA Monitoring script
 Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
 Locust not ready yet, checking again!
@@ -293,25 +318,46 @@ progress: 98/100
 progress: 99/100
 Test done, Starting data collection after 5 seconds
 Collecting Locust stats
+Collecting worker response times file
+tar: Removing leading `/' from member names
+Killing the HPA monitoring script
+./run_experiments.sh: line 39: 2130313 Killed                  bash scripts/hpa_monitor.sh ${TEST_DIR}
 Cleaning up setup.
 release "epi-bf" uninstalled
 release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_2_20210621135254
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_2_20210621135254
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_2
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_2
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
+./run_experiments.sh: line 39: 2130126 Killed                  sudo python3 scripts/xen_vm_stats.py ${TEST_DIR} > /dev/null 2> /dev/null
+Test No. 2 is done, wait till all pods are terminated
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
 Running Test number 3
-Creating Directory hpa_test_data/TEST_NO_3_20210621135614
+Creating Directory hpa_test_data/TEST_NO_3
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Mon Jun 21 13:56:20 2021
+LAST DEPLOYED: Wed Jun 23 17:21:12 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -321,7 +367,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Mon Jun 21 13:56:29 2021
+LAST DEPLOYED: Wed Jun 23 17:21:22 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -333,13 +379,9 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
+Start the HPA Monitoring script
 Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
 Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
@@ -448,25 +490,40 @@ progress: 98/100
 progress: 99/100
 Test done, Starting data collection after 5 seconds
 Collecting Locust stats
+Collecting worker response times file
+tar: Removing leading `/' from member names
+Killing the HPA monitoring script
+./run_experiments.sh: line 39: 2134508 Killed                  bash scripts/hpa_monitor.sh ${TEST_DIR}
 Cleaning up setup.
 release "epi-bf" uninstalled
 release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_3_20210621135614
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_3_20210621135614
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_3
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_3
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
+Test No. 3 is done, wait till all pods are terminated
+Not all pods are terminated yet.
+./run_experiments.sh: line 39: 2134302 Killed                  sudo python3 scripts/xen_vm_stats.py ${TEST_DIR} > /dev/null 2> /dev/null
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
 Running Test number 4
-Creating Directory hpa_test_data/TEST_NO_4_20210621135936
+Creating Directory hpa_test_data/TEST_NO_4
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Mon Jun 21 13:59:42 2021
+LAST DEPLOYED: Wed Jun 23 17:24:47 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -476,7 +533,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Mon Jun 21 13:59:48 2021
+LAST DEPLOYED: Wed Jun 23 17:24:56 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -488,12 +545,9 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
+Start the HPA Monitoring script
 Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
 Locust not ready yet, checking again!
 Locust retrun 200, Service is ready.
 Locust is starting, sleeping for 10 seconds
@@ -602,25 +656,50 @@ progress: 98/100
 progress: 99/100
 Test done, Starting data collection after 5 seconds
 Collecting Locust stats
+Collecting worker response times file
+tar: Removing leading `/' from member names
+Killing the HPA monitoring script
+./run_experiments.sh: line 39: 2138130 Killed                  bash scripts/hpa_monitor.sh ${TEST_DIR}
 Cleaning up setup.
 release "epi-bf" uninstalled
 release "locust" uninstalled
 configmap "loadtest-locustfile" deleted
 configmap "loadtest-lib" deleted
 Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_4_20210621135936
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_4_20210621135936
+Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_4
+Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_4
 Deleting old bridging function logs
 Removing BF stats from 145.100.110.91
 Removing BF stats from 145.100.110.92
 Killing the Worker node monitoring script
+Test No. 4 is done, wait till all pods are terminated
+Not all pods are terminated yet.
+./run_experiments.sh: line 39: 2137920 Killed                  sudo python3 scripts/xen_vm_stats.py ${TEST_DIR} > /dev/null 2> /dev/null
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
+Not all pods are terminated yet.
 Running Test number 5
-Creating Directory hpa_test_data/TEST_NO_5_20210621140256
+Creating Directory hpa_test_data/TEST_NO_5
 Start Worker node monitoring
 Deploying the Briding function, Proxy, and Server
 "epi-helm" already exists with the same configuration, skipping
 NAME: epi-bf
-LAST DEPLOYED: Mon Jun 21 14:03:03 2021
+LAST DEPLOYED: Wed Jun 23 17:28:22 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -630,7 +709,7 @@ Deploying Locust load generator
 configmap/loadtest-locustfile created
 configmap/loadtest-lib created
 NAME: locust
-LAST DEPLOYED: Mon Jun 21 14:03:13 2021
+LAST DEPLOYED: Wed Jun 23 17:28:30 2021
 NAMESPACE: epi
 STATUS: deployed
 REVISION: 1
@@ -642,1356 +721,10 @@ NOTES:
   export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
   echo http://$SERVICE_IP:
 Setup is deploying, sleeping for 10 seconds
+Start the HPA Monitoring script
 Locust service URL is http://145.100.110.82:8089
 Checking if Locust service is ready.
 Locust not ready yet, checking again!
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
-Locust retrun 200, Service is ready.
-Locust is starting, sleeping for 10 seconds
-Starting locust request
-http://145.100.110.82:8089/swarm
-<Response [200]>
-progress: 0/100
-progress: 1/100
-progress: 2/100
-progress: 3/100
-progress: 4/100
-progress: 5/100
-progress: 6/100
-progress: 7/100
-progress: 8/100
-progress: 9/100
-progress: 10/100
-progress: 11/100
-progress: 12/100
-progress: 13/100
-progress: 14/100
-progress: 15/100
-progress: 16/100
-progress: 17/100
-progress: 18/100
-progress: 19/100
-progress: 20/100
-progress: 21/100
-progress: 22/100
-progress: 23/100
-progress: 24/100
-progress: 25/100
-progress: 26/100
-progress: 27/100
-progress: 28/100
-progress: 29/100
-progress: 30/100
-progress: 31/100
-progress: 32/100
-progress: 33/100
-progress: 34/100
-progress: 35/100
-progress: 36/100
-progress: 37/100
-progress: 38/100
-progress: 39/100
-progress: 40/100
-progress: 41/100
-progress: 42/100
-progress: 43/100
-progress: 44/100
-progress: 45/100
-progress: 46/100
-progress: 47/100
-progress: 48/100
-progress: 49/100
-progress: 50/100
-progress: 51/100
-progress: 52/100
-progress: 53/100
-progress: 54/100
-progress: 55/100
-progress: 56/100
-progress: 57/100
-progress: 58/100
-progress: 59/100
-progress: 60/100
-progress: 61/100
-progress: 62/100
-progress: 63/100
-progress: 64/100
-progress: 65/100
-progress: 66/100
-progress: 67/100
-progress: 68/100
-progress: 69/100
-progress: 70/100
-progress: 71/100
-progress: 72/100
-progress: 73/100
-progress: 74/100
-progress: 75/100
-progress: 76/100
-progress: 77/100
-progress: 78/100
-progress: 79/100
-progress: 80/100
-progress: 81/100
-progress: 82/100
-progress: 83/100
-progress: 84/100
-progress: 85/100
-progress: 86/100
-progress: 87/100
-progress: 88/100
-progress: 89/100
-progress: 90/100
-progress: 91/100
-progress: 92/100
-progress: 93/100
-progress: 94/100
-progress: 95/100
-progress: 96/100
-progress: 97/100
-progress: 98/100
-progress: 99/100
-Test done, Starting data collection after 5 seconds
-Collecting Locust stats
-Cleaning up setup.
-release "epi-bf" uninstalled
-release "locust" uninstalled
-configmap "loadtest-locustfile" deleted
-configmap "loadtest-lib" deleted
-Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_5_20210621140256
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_5_20210621140256
-Deleting old bridging function logs
-Removing BF stats from 145.100.110.91
-Removing BF stats from 145.100.110.92
-Killing the Worker node monitoring script
-Running Test number 6
-Creating Directory hpa_test_data/TEST_NO_6_20210621140603
-Start Worker node monitoring
-Deploying the Briding function, Proxy, and Server
-"epi-helm" already exists with the same configuration, skipping
-NAME: epi-bf
-LAST DEPLOYED: Mon Jun 21 14:06:09 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-Deploying Locust load generator
-"deliveryhero" already exists with the same configuration, skipping
-configmap/loadtest-locustfile created
-configmap/loadtest-lib created
-NAME: locust
-LAST DEPLOYED: Mon Jun 21 14:06:17 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-## To access the locust master UI
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace epi svc -w locust'
-  export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
-  echo http://$SERVICE_IP:
-Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.82:8089
-Checking if Locust service is ready.
-Locust retrun 200, Service is ready.
-Locust is starting, sleeping for 10 seconds
-Starting locust request
-http://145.100.110.82:8089/swarm
-<Response [200]>
-progress: 0/100
-progress: 1/100
-progress: 2/100
-progress: 3/100
-progress: 4/100
-progress: 5/100
-progress: 6/100
-progress: 7/100
-progress: 8/100
-progress: 9/100
-progress: 10/100
-progress: 11/100
-progress: 12/100
-progress: 13/100
-progress: 14/100
-progress: 15/100
-progress: 16/100
-progress: 17/100
-progress: 18/100
-progress: 19/100
-progress: 20/100
-progress: 21/100
-progress: 22/100
-progress: 23/100
-progress: 24/100
-progress: 25/100
-progress: 26/100
-progress: 27/100
-progress: 28/100
-progress: 29/100
-progress: 30/100
-progress: 31/100
-progress: 32/100
-progress: 33/100
-progress: 34/100
-progress: 35/100
-progress: 36/100
-progress: 37/100
-progress: 38/100
-progress: 39/100
-progress: 40/100
-progress: 41/100
-progress: 42/100
-progress: 43/100
-progress: 44/100
-progress: 45/100
-progress: 46/100
-progress: 47/100
-progress: 48/100
-progress: 49/100
-progress: 50/100
-progress: 51/100
-progress: 52/100
-progress: 53/100
-progress: 54/100
-progress: 55/100
-progress: 56/100
-progress: 57/100
-progress: 58/100
-progress: 59/100
-progress: 60/100
-progress: 61/100
-progress: 62/100
-progress: 63/100
-progress: 64/100
-progress: 65/100
-progress: 66/100
-progress: 67/100
-progress: 68/100
-progress: 69/100
-progress: 70/100
-progress: 71/100
-progress: 72/100
-progress: 73/100
-progress: 74/100
-progress: 75/100
-progress: 76/100
-progress: 77/100
-progress: 78/100
-progress: 79/100
-progress: 80/100
-progress: 81/100
-progress: 82/100
-progress: 83/100
-progress: 84/100
-progress: 85/100
-progress: 86/100
-progress: 87/100
-progress: 88/100
-progress: 89/100
-progress: 90/100
-progress: 91/100
-progress: 92/100
-progress: 93/100
-progress: 94/100
-progress: 95/100
-progress: 96/100
-progress: 97/100
-progress: 98/100
-progress: 99/100
-Test done, Starting data collection after 5 seconds
-Collecting Locust stats
-Cleaning up setup.
-release "epi-bf" uninstalled
-release "locust" uninstalled
-configmap "loadtest-locustfile" deleted
-configmap "loadtest-lib" deleted
-Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_6_20210621140603
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_6_20210621140603
-Deleting old bridging function logs
-Removing BF stats from 145.100.110.91
-Removing BF stats from 145.100.110.92
-Killing the Worker node monitoring script
-Running Test number 7
-Creating Directory hpa_test_data/TEST_NO_7_20210621140851
-Start Worker node monitoring
-Deploying the Briding function, Proxy, and Server
-"epi-helm" already exists with the same configuration, skipping
-NAME: epi-bf
-LAST DEPLOYED: Mon Jun 21 14:08:56 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-Deploying Locust load generator
-"deliveryhero" already exists with the same configuration, skipping
-configmap/loadtest-locustfile created
-configmap/loadtest-lib created
-NAME: locust
-LAST DEPLOYED: Mon Jun 21 14:09:14 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-## To access the locust master UI
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace epi svc -w locust'
-  export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
-  echo http://$SERVICE_IP:
-Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.82:8089
-Checking if Locust service is ready.
-Locust not ready yet, checking again!
-Locust retrun 200, Service is ready.
-Locust is starting, sleeping for 10 seconds
-Starting locust request
-http://145.100.110.82:8089/swarm
-<Response [200]>
-progress: 0/100
-progress: 1/100
-progress: 2/100
-progress: 3/100
-progress: 4/100
-progress: 5/100
-progress: 6/100
-progress: 7/100
-progress: 8/100
-progress: 9/100
-progress: 10/100
-progress: 11/100
-progress: 12/100
-progress: 13/100
-progress: 14/100
-progress: 15/100
-progress: 16/100
-progress: 17/100
-progress: 18/100
-progress: 19/100
-progress: 20/100
-progress: 21/100
-progress: 22/100
-progress: 23/100
-progress: 24/100
-progress: 25/100
-progress: 26/100
-progress: 27/100
-progress: 28/100
-progress: 29/100
-progress: 30/100
-progress: 31/100
-progress: 32/100
-progress: 33/100
-progress: 34/100
-progress: 35/100
-progress: 36/100
-progress: 37/100
-progress: 38/100
-progress: 39/100
-progress: 40/100
-progress: 41/100
-progress: 42/100
-progress: 43/100
-progress: 44/100
-progress: 45/100
-progress: 46/100
-progress: 47/100
-progress: 48/100
-progress: 49/100
-progress: 50/100
-progress: 51/100
-progress: 52/100
-progress: 53/100
-progress: 54/100
-progress: 55/100
-progress: 56/100
-progress: 57/100
-progress: 58/100
-progress: 59/100
-progress: 60/100
-progress: 61/100
-progress: 62/100
-progress: 63/100
-progress: 64/100
-progress: 65/100
-progress: 66/100
-progress: 67/100
-progress: 68/100
-progress: 69/100
-progress: 70/100
-progress: 71/100
-progress: 72/100
-progress: 73/100
-progress: 74/100
-progress: 75/100
-progress: 76/100
-progress: 77/100
-progress: 78/100
-progress: 79/100
-progress: 80/100
-progress: 81/100
-progress: 82/100
-progress: 83/100
-progress: 84/100
-progress: 85/100
-progress: 86/100
-progress: 87/100
-progress: 88/100
-progress: 89/100
-progress: 90/100
-progress: 91/100
-progress: 92/100
-progress: 93/100
-progress: 94/100
-progress: 95/100
-progress: 96/100
-progress: 97/100
-progress: 98/100
-progress: 99/100
-Test done, Starting data collection after 5 seconds
-Collecting Locust stats
-Cleaning up setup.
-release "epi-bf" uninstalled
-release "locust" uninstalled
-configmap "loadtest-locustfile" deleted
-configmap "loadtest-lib" deleted
-Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_7_20210621140851
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_7_20210621140851
-Deleting old bridging function logs
-Removing BF stats from 145.100.110.91
-Removing BF stats from 145.100.110.92
-Killing the Worker node monitoring script
-Running Test number 8
-Creating Directory hpa_test_data/TEST_NO_8_20210621141152
-Start Worker node monitoring
-Deploying the Briding function, Proxy, and Server
-"epi-helm" already exists with the same configuration, skipping
-NAME: epi-bf
-LAST DEPLOYED: Mon Jun 21 14:11:58 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-Deploying Locust load generator
-"deliveryhero" already exists with the same configuration, skipping
-configmap/loadtest-locustfile created
-configmap/loadtest-lib created
-NAME: locust
-LAST DEPLOYED: Mon Jun 21 14:12:09 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-## To access the locust master UI
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace epi svc -w locust'
-  export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
-  echo http://$SERVICE_IP:
-Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.82:8089
-Checking if Locust service is ready.
-Locust retrun 200, Service is ready.
-Locust is starting, sleeping for 10 seconds
-Starting locust request
-http://145.100.110.82:8089/swarm
-<Response [200]>
-progress: 0/100
-progress: 1/100
-progress: 2/100
-progress: 3/100
-progress: 4/100
-progress: 5/100
-progress: 6/100
-progress: 7/100
-progress: 8/100
-progress: 9/100
-progress: 10/100
-progress: 11/100
-progress: 12/100
-progress: 13/100
-progress: 14/100
-progress: 15/100
-progress: 16/100
-progress: 17/100
-progress: 18/100
-progress: 19/100
-progress: 20/100
-progress: 21/100
-progress: 22/100
-progress: 23/100
-progress: 24/100
-progress: 25/100
-progress: 26/100
-progress: 27/100
-progress: 28/100
-progress: 29/100
-progress: 30/100
-progress: 31/100
-progress: 32/100
-progress: 33/100
-progress: 34/100
-progress: 35/100
-progress: 36/100
-progress: 37/100
-progress: 38/100
-progress: 39/100
-progress: 40/100
-progress: 41/100
-progress: 42/100
-progress: 43/100
-progress: 44/100
-progress: 45/100
-progress: 46/100
-progress: 47/100
-progress: 48/100
-progress: 49/100
-progress: 50/100
-progress: 51/100
-progress: 52/100
-progress: 53/100
-progress: 54/100
-progress: 55/100
-progress: 56/100
-progress: 57/100
-progress: 58/100
-progress: 59/100
-progress: 60/100
-progress: 61/100
-progress: 62/100
-progress: 63/100
-progress: 64/100
-progress: 65/100
-progress: 66/100
-progress: 67/100
-progress: 68/100
-progress: 69/100
-progress: 70/100
-progress: 71/100
-progress: 72/100
-progress: 73/100
-progress: 74/100
-progress: 75/100
-progress: 76/100
-progress: 77/100
-progress: 78/100
-progress: 79/100
-progress: 80/100
-progress: 81/100
-progress: 82/100
-progress: 83/100
-progress: 84/100
-progress: 85/100
-progress: 86/100
-progress: 87/100
-progress: 88/100
-progress: 89/100
-progress: 90/100
-progress: 91/100
-progress: 92/100
-progress: 93/100
-progress: 94/100
-progress: 95/100
-progress: 96/100
-progress: 97/100
-progress: 98/100
-progress: 99/100
-Test done, Starting data collection after 5 seconds
-Collecting Locust stats
-Cleaning up setup.
-release "epi-bf" uninstalled
-release "locust" uninstalled
-configmap "loadtest-locustfile" deleted
-configmap "loadtest-lib" deleted
-Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_8_20210621141152
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_8_20210621141152
-Deleting old bridging function logs
-Removing BF stats from 145.100.110.91
-Removing BF stats from 145.100.110.92
-Killing the Worker node monitoring script
-Running Test number 9
-Creating Directory hpa_test_data/TEST_NO_9_20210621141444
-Start Worker node monitoring
-Deploying the Briding function, Proxy, and Server
-"epi-helm" already exists with the same configuration, skipping
-NAME: epi-bf
-LAST DEPLOYED: Mon Jun 21 14:14:50 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-Deploying Locust load generator
-"deliveryhero" already exists with the same configuration, skipping
-configmap/loadtest-locustfile created
-configmap/loadtest-lib created
-NAME: locust
-LAST DEPLOYED: Mon Jun 21 14:14:56 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-## To access the locust master UI
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace epi svc -w locust'
-  export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
-  echo http://$SERVICE_IP:
-Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.82:8089
-Checking if Locust service is ready.
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
-Locust retrun 200, Service is ready.
-Locust is starting, sleeping for 10 seconds
-Starting locust request
-http://145.100.110.82:8089/swarm
-<Response [200]>
-progress: 0/100
-progress: 1/100
-progress: 2/100
-progress: 3/100
-progress: 4/100
-progress: 5/100
-progress: 6/100
-progress: 7/100
-progress: 8/100
-progress: 9/100
-progress: 10/100
-progress: 11/100
-progress: 12/100
-progress: 13/100
-progress: 14/100
-progress: 15/100
-progress: 16/100
-progress: 17/100
-progress: 18/100
-progress: 19/100
-progress: 20/100
-progress: 21/100
-progress: 22/100
-progress: 23/100
-progress: 24/100
-progress: 25/100
-progress: 26/100
-progress: 27/100
-progress: 28/100
-progress: 29/100
-progress: 30/100
-progress: 31/100
-progress: 32/100
-progress: 33/100
-progress: 34/100
-progress: 35/100
-progress: 36/100
-progress: 37/100
-progress: 38/100
-progress: 39/100
-progress: 40/100
-progress: 41/100
-progress: 42/100
-progress: 43/100
-progress: 44/100
-progress: 45/100
-progress: 46/100
-progress: 47/100
-progress: 48/100
-progress: 49/100
-progress: 50/100
-progress: 51/100
-progress: 52/100
-progress: 53/100
-progress: 54/100
-progress: 55/100
-progress: 56/100
-progress: 57/100
-progress: 58/100
-progress: 59/100
-progress: 60/100
-progress: 61/100
-progress: 62/100
-progress: 63/100
-progress: 64/100
-progress: 65/100
-progress: 66/100
-progress: 67/100
-progress: 68/100
-progress: 69/100
-progress: 70/100
-progress: 71/100
-progress: 72/100
-progress: 73/100
-progress: 74/100
-progress: 75/100
-progress: 76/100
-progress: 77/100
-progress: 78/100
-progress: 79/100
-progress: 80/100
-progress: 81/100
-progress: 82/100
-progress: 83/100
-progress: 84/100
-progress: 85/100
-progress: 86/100
-progress: 87/100
-progress: 88/100
-progress: 89/100
-progress: 90/100
-progress: 91/100
-progress: 92/100
-progress: 93/100
-progress: 94/100
-progress: 95/100
-progress: 96/100
-progress: 97/100
-progress: 98/100
-progress: 99/100
-Test done, Starting data collection after 5 seconds
-Collecting Locust stats
-Cleaning up setup.
-release "epi-bf" uninstalled
-release "locust" uninstalled
-configmap "loadtest-locustfile" deleted
-configmap "loadtest-lib" deleted
-Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_9_20210621141444
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_9_20210621141444
-Deleting old bridging function logs
-Removing BF stats from 145.100.110.91
-Removing BF stats from 145.100.110.92
-Killing the Worker node monitoring script
-Running Test number 10
-Creating Directory hpa_test_data/TEST_NO_10_20210621141753
-Start Worker node monitoring
-Deploying the Briding function, Proxy, and Server
-"epi-helm" already exists with the same configuration, skipping
-NAME: epi-bf
-LAST DEPLOYED: Mon Jun 21 14:18:02 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-Deploying Locust load generator
-"deliveryhero" already exists with the same configuration, skipping
-configmap/loadtest-locustfile created
-configmap/loadtest-lib created
-NAME: locust
-LAST DEPLOYED: Mon Jun 21 14:18:12 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-## To access the locust master UI
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace epi svc -w locust'
-  export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
-  echo http://$SERVICE_IP:
-Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.82:8089
-Checking if Locust service is ready.
-Locust retrun 200, Service is ready.
-Locust is starting, sleeping for 10 seconds
-Starting locust request
-http://145.100.110.82:8089/swarm
-<Response [200]>
-progress: 0/100
-progress: 1/100
-progress: 2/100
-progress: 3/100
-progress: 4/100
-progress: 5/100
-progress: 6/100
-progress: 7/100
-progress: 8/100
-progress: 9/100
-progress: 10/100
-progress: 11/100
-progress: 12/100
-progress: 13/100
-progress: 14/100
-progress: 15/100
-progress: 16/100
-progress: 17/100
-progress: 18/100
-progress: 19/100
-progress: 20/100
-progress: 21/100
-progress: 22/100
-progress: 23/100
-progress: 24/100
-progress: 25/100
-progress: 26/100
-progress: 27/100
-progress: 28/100
-progress: 29/100
-progress: 30/100
-progress: 31/100
-progress: 32/100
-progress: 33/100
-progress: 34/100
-progress: 35/100
-progress: 36/100
-progress: 37/100
-progress: 38/100
-progress: 39/100
-progress: 40/100
-progress: 41/100
-progress: 42/100
-progress: 43/100
-progress: 44/100
-progress: 45/100
-progress: 46/100
-progress: 47/100
-progress: 48/100
-progress: 49/100
-progress: 50/100
-progress: 51/100
-progress: 52/100
-progress: 53/100
-progress: 54/100
-progress: 55/100
-progress: 56/100
-progress: 57/100
-progress: 58/100
-progress: 59/100
-progress: 60/100
-progress: 61/100
-progress: 62/100
-progress: 63/100
-progress: 64/100
-progress: 65/100
-progress: 66/100
-progress: 67/100
-progress: 68/100
-progress: 69/100
-progress: 70/100
-progress: 71/100
-progress: 72/100
-progress: 73/100
-progress: 74/100
-progress: 75/100
-progress: 76/100
-progress: 77/100
-progress: 78/100
-progress: 79/100
-progress: 80/100
-progress: 81/100
-progress: 82/100
-progress: 83/100
-progress: 84/100
-progress: 85/100
-progress: 86/100
-progress: 87/100
-progress: 88/100
-progress: 89/100
-progress: 90/100
-progress: 91/100
-progress: 92/100
-progress: 93/100
-progress: 94/100
-progress: 95/100
-progress: 96/100
-progress: 97/100
-progress: 98/100
-progress: 99/100
-Test done, Starting data collection after 5 seconds
-Collecting Locust stats
-Cleaning up setup.
-release "epi-bf" uninstalled
-release "locust" uninstalled
-configmap "loadtest-locustfile" deleted
-configmap "loadtest-lib" deleted
-Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_10_20210621141753
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_10_20210621141753
-Deleting old bridging function logs
-Removing BF stats from 145.100.110.91
-Removing BF stats from 145.100.110.92
-Killing the Worker node monitoring script
-Running Test number 11
-Creating Directory hpa_test_data/TEST_NO_11_20210621142046
-Start Worker node monitoring
-Deploying the Briding function, Proxy, and Server
-"epi-helm" already exists with the same configuration, skipping
-NAME: epi-bf
-LAST DEPLOYED: Mon Jun 21 14:20:50 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-Deploying Locust load generator
-"deliveryhero" already exists with the same configuration, skipping
-configmap/loadtest-locustfile created
-configmap/loadtest-lib created
-NAME: locust
-LAST DEPLOYED: Mon Jun 21 14:20:57 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-## To access the locust master UI
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace epi svc -w locust'
-  export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
-  echo http://$SERVICE_IP:
-Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.82:8089
-Checking if Locust service is ready.
-Locust retrun 200, Service is ready.
-Locust is starting, sleeping for 10 seconds
-Starting locust request
-http://145.100.110.82:8089/swarm
-<Response [200]>
-progress: 0/100
-progress: 1/100
-progress: 2/100
-progress: 3/100
-progress: 4/100
-progress: 5/100
-progress: 6/100
-progress: 7/100
-progress: 8/100
-progress: 9/100
-progress: 10/100
-progress: 11/100
-progress: 12/100
-progress: 13/100
-progress: 14/100
-progress: 15/100
-progress: 16/100
-progress: 17/100
-progress: 18/100
-progress: 19/100
-progress: 20/100
-progress: 21/100
-progress: 22/100
-progress: 23/100
-progress: 24/100
-progress: 25/100
-progress: 26/100
-progress: 27/100
-progress: 28/100
-progress: 29/100
-progress: 30/100
-progress: 31/100
-progress: 32/100
-progress: 33/100
-progress: 34/100
-progress: 35/100
-progress: 36/100
-progress: 37/100
-progress: 38/100
-progress: 39/100
-progress: 40/100
-progress: 41/100
-progress: 42/100
-progress: 43/100
-progress: 44/100
-progress: 45/100
-progress: 46/100
-progress: 47/100
-progress: 48/100
-progress: 49/100
-progress: 50/100
-progress: 51/100
-progress: 52/100
-progress: 53/100
-progress: 54/100
-progress: 55/100
-progress: 56/100
-progress: 57/100
-progress: 58/100
-progress: 59/100
-progress: 60/100
-progress: 61/100
-progress: 62/100
-progress: 63/100
-progress: 64/100
-progress: 65/100
-progress: 66/100
-progress: 67/100
-progress: 68/100
-progress: 69/100
-progress: 70/100
-progress: 71/100
-progress: 72/100
-progress: 73/100
-progress: 74/100
-progress: 75/100
-progress: 76/100
-progress: 77/100
-progress: 78/100
-progress: 79/100
-progress: 80/100
-progress: 81/100
-progress: 82/100
-progress: 83/100
-progress: 84/100
-progress: 85/100
-progress: 86/100
-progress: 87/100
-progress: 88/100
-progress: 89/100
-progress: 90/100
-progress: 91/100
-progress: 92/100
-progress: 93/100
-progress: 94/100
-progress: 95/100
-progress: 96/100
-progress: 97/100
-progress: 98/100
-progress: 99/100
-Test done, Starting data collection after 5 seconds
-Collecting Locust stats
-Cleaning up setup.
-release "epi-bf" uninstalled
-release "locust" uninstalled
-configmap "loadtest-locustfile" deleted
-configmap "loadtest-lib" deleted
-Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_11_20210621142046
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_11_20210621142046
-Deleting old bridging function logs
-Removing BF stats from 145.100.110.91
-Removing BF stats from 145.100.110.92
-Killing the Worker node monitoring script
-Running Test number 12
-Creating Directory hpa_test_data/TEST_NO_12_20210621142331
-Start Worker node monitoring
-Deploying the Briding function, Proxy, and Server
-"epi-helm" already exists with the same configuration, skipping
-NAME: epi-bf
-LAST DEPLOYED: Mon Jun 21 14:23:37 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-Deploying Locust load generator
-"deliveryhero" already exists with the same configuration, skipping
-configmap/loadtest-locustfile created
-configmap/loadtest-lib created
-NAME: locust
-LAST DEPLOYED: Mon Jun 21 14:23:43 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-## To access the locust master UI
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace epi svc -w locust'
-  export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
-  echo http://$SERVICE_IP:
-Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.82:8089
-Checking if Locust service is ready.
-Locust retrun 200, Service is ready.
-Locust is starting, sleeping for 10 seconds
-Starting locust request
-http://145.100.110.82:8089/swarm
-<Response [200]>
-progress: 0/100
-progress: 1/100
-progress: 2/100
-progress: 3/100
-progress: 4/100
-progress: 5/100
-progress: 6/100
-progress: 7/100
-progress: 8/100
-progress: 9/100
-progress: 10/100
-progress: 11/100
-progress: 12/100
-progress: 13/100
-progress: 14/100
-progress: 15/100
-progress: 16/100
-progress: 17/100
-progress: 18/100
-progress: 19/100
-progress: 20/100
-progress: 21/100
-progress: 22/100
-progress: 23/100
-progress: 24/100
-progress: 25/100
-progress: 26/100
-progress: 27/100
-progress: 28/100
-progress: 29/100
-progress: 30/100
-progress: 31/100
-progress: 32/100
-progress: 33/100
-progress: 34/100
-progress: 35/100
-progress: 36/100
-progress: 37/100
-progress: 38/100
-progress: 39/100
-progress: 40/100
-progress: 41/100
-progress: 42/100
-progress: 43/100
-progress: 44/100
-progress: 45/100
-progress: 46/100
-progress: 47/100
-progress: 48/100
-progress: 49/100
-progress: 50/100
-progress: 51/100
-progress: 52/100
-progress: 53/100
-progress: 54/100
-progress: 55/100
-progress: 56/100
-progress: 57/100
-progress: 58/100
-progress: 59/100
-progress: 60/100
-progress: 61/100
-progress: 62/100
-progress: 63/100
-progress: 64/100
-progress: 65/100
-progress: 66/100
-progress: 67/100
-progress: 68/100
-progress: 69/100
-progress: 70/100
-progress: 71/100
-progress: 72/100
-progress: 73/100
-progress: 74/100
-progress: 75/100
-progress: 76/100
-progress: 77/100
-progress: 78/100
-progress: 79/100
-progress: 80/100
-progress: 81/100
-progress: 82/100
-progress: 83/100
-progress: 84/100
-progress: 85/100
-progress: 86/100
-progress: 87/100
-progress: 88/100
-progress: 89/100
-progress: 90/100
-progress: 91/100
-progress: 92/100
-progress: 93/100
-progress: 94/100
-progress: 95/100
-progress: 96/100
-progress: 97/100
-progress: 98/100
-progress: 99/100
-Test done, Starting data collection after 5 seconds
-Collecting Locust stats
-Cleaning up setup.
-release "epi-bf" uninstalled
-release "locust" uninstalled
-configmap "loadtest-locustfile" deleted
-configmap "loadtest-lib" deleted
-Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_12_20210621142331
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_12_20210621142331
-Deleting old bridging function logs
-Removing BF stats from 145.100.110.91
-Removing BF stats from 145.100.110.92
-Killing the Worker node monitoring script
-Running Test number 13
-Creating Directory hpa_test_data/TEST_NO_13_20210621142620
-Start Worker node monitoring
-Deploying the Briding function, Proxy, and Server
-"epi-helm" already exists with the same configuration, skipping
-NAME: epi-bf
-LAST DEPLOYED: Mon Jun 21 14:26:25 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-Deploying Locust load generator
-"deliveryhero" already exists with the same configuration, skipping
-configmap/loadtest-locustfile created
-configmap/loadtest-lib created
-NAME: locust
-LAST DEPLOYED: Mon Jun 21 14:26:33 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-## To access the locust master UI
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace epi svc -w locust'
-  export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
-  echo http://$SERVICE_IP:
-Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.82:8089
-Checking if Locust service is ready.
-Locust retrun 200, Service is ready.
-Locust is starting, sleeping for 10 seconds
-Starting locust request
-http://145.100.110.82:8089/swarm
-<Response [200]>
-progress: 0/100
-progress: 1/100
-progress: 2/100
-progress: 3/100
-progress: 4/100
-progress: 5/100
-progress: 6/100
-progress: 7/100
-progress: 8/100
-progress: 9/100
-progress: 10/100
-progress: 11/100
-progress: 12/100
-progress: 13/100
-progress: 14/100
-progress: 15/100
-progress: 16/100
-progress: 17/100
-progress: 18/100
-progress: 19/100
-progress: 20/100
-progress: 21/100
-progress: 22/100
-progress: 23/100
-progress: 24/100
-progress: 25/100
-progress: 26/100
-progress: 27/100
-progress: 28/100
-progress: 29/100
-progress: 30/100
-progress: 31/100
-progress: 32/100
-progress: 33/100
-progress: 34/100
-progress: 35/100
-progress: 36/100
-progress: 37/100
-progress: 38/100
-progress: 39/100
-progress: 40/100
-progress: 41/100
-progress: 42/100
-progress: 43/100
-progress: 44/100
-progress: 45/100
-progress: 46/100
-progress: 47/100
-progress: 48/100
-progress: 49/100
-progress: 50/100
-progress: 51/100
-progress: 52/100
-progress: 53/100
-progress: 54/100
-progress: 55/100
-progress: 56/100
-progress: 57/100
-progress: 58/100
-progress: 59/100
-progress: 60/100
-progress: 61/100
-progress: 62/100
-progress: 63/100
-progress: 64/100
-progress: 65/100
-progress: 66/100
-progress: 67/100
-progress: 68/100
-progress: 69/100
-progress: 70/100
-progress: 71/100
-progress: 72/100
-progress: 73/100
-progress: 74/100
-progress: 75/100
-progress: 76/100
-progress: 77/100
-progress: 78/100
-progress: 79/100
-progress: 80/100
-progress: 81/100
-progress: 82/100
-progress: 83/100
-progress: 84/100
-progress: 85/100
-progress: 86/100
-progress: 87/100
-progress: 88/100
-progress: 89/100
-progress: 90/100
-progress: 91/100
-progress: 92/100
-progress: 93/100
-progress: 94/100
-progress: 95/100
-progress: 96/100
-progress: 97/100
-progress: 98/100
-progress: 99/100
-Test done, Starting data collection after 5 seconds
-Collecting Locust stats
-Cleaning up setup.
-release "epi-bf" uninstalled
-release "locust" uninstalled
-configmap "loadtest-locustfile" deleted
-configmap "loadtest-lib" deleted
-Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_13_20210621142620
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_13_20210621142620
-Deleting old bridging function logs
-Removing BF stats from 145.100.110.91
-Removing BF stats from 145.100.110.92
-Killing the Worker node monitoring script
-Running Test number 14
-Creating Directory hpa_test_data/TEST_NO_14_20210621142904
-Start Worker node monitoring
-Deploying the Briding function, Proxy, and Server
-"epi-helm" already exists with the same configuration, skipping
-NAME: epi-bf
-LAST DEPLOYED: Mon Jun 21 14:29:10 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-Deploying Locust load generator
-"deliveryhero" already exists with the same configuration, skipping
-configmap/loadtest-locustfile created
-configmap/loadtest-lib created
-NAME: locust
-LAST DEPLOYED: Mon Jun 21 14:29:16 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-## To access the locust master UI
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace epi svc -w locust'
-  export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
-  echo http://$SERVICE_IP:
-Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.82:8089
-Checking if Locust service is ready.
 Locust not ready yet, checking again!
 Locust not ready yet, checking again!
 Locust not ready yet, checking again!
@@ -2103,319 +836,3 @@ progress: 98/100
 progress: 99/100
 Test done, Starting data collection after 5 seconds
 Collecting Locust stats
-Cleaning up setup.
-release "epi-bf" uninstalled
-release "locust" uninstalled
-configmap "loadtest-locustfile" deleted
-configmap "loadtest-lib" deleted
-Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_14_20210621142904
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_14_20210621142904
-Deleting old bridging function logs
-Removing BF stats from 145.100.110.91
-Removing BF stats from 145.100.110.92
-Killing the Worker node monitoring script
-Running Test number 15
-Creating Directory hpa_test_data/TEST_NO_15_20210621143207
-Start Worker node monitoring
-Deploying the Briding function, Proxy, and Server
-"epi-helm" already exists with the same configuration, skipping
-NAME: epi-bf
-LAST DEPLOYED: Mon Jun 21 14:32:14 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-Deploying Locust load generator
-"deliveryhero" already exists with the same configuration, skipping
-configmap/loadtest-locustfile created
-configmap/loadtest-lib created
-NAME: locust
-LAST DEPLOYED: Mon Jun 21 14:32:21 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-## To access the locust master UI
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace epi svc -w locust'
-  export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
-  echo http://$SERVICE_IP:
-Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.82:8089
-Checking if Locust service is ready.
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
-Locust retrun 200, Service is ready.
-Locust is starting, sleeping for 10 seconds
-Starting locust request
-http://145.100.110.82:8089/swarm
-<Response [200]>
-progress: 0/100
-progress: 1/100
-progress: 2/100
-progress: 3/100
-progress: 4/100
-progress: 5/100
-progress: 6/100
-progress: 7/100
-progress: 8/100
-progress: 9/100
-progress: 10/100
-progress: 11/100
-progress: 12/100
-progress: 13/100
-progress: 14/100
-progress: 15/100
-progress: 16/100
-progress: 17/100
-progress: 18/100
-progress: 19/100
-progress: 20/100
-progress: 21/100
-progress: 22/100
-progress: 23/100
-progress: 24/100
-progress: 25/100
-progress: 26/100
-progress: 27/100
-progress: 28/100
-progress: 29/100
-progress: 30/100
-progress: 31/100
-progress: 32/100
-progress: 33/100
-progress: 34/100
-progress: 35/100
-progress: 36/100
-progress: 37/100
-progress: 38/100
-progress: 39/100
-progress: 40/100
-progress: 41/100
-progress: 42/100
-progress: 43/100
-progress: 44/100
-progress: 45/100
-progress: 46/100
-progress: 47/100
-progress: 48/100
-progress: 49/100
-progress: 50/100
-progress: 51/100
-progress: 52/100
-progress: 53/100
-progress: 54/100
-progress: 55/100
-progress: 56/100
-progress: 57/100
-progress: 58/100
-progress: 59/100
-progress: 60/100
-progress: 61/100
-progress: 62/100
-progress: 63/100
-progress: 64/100
-progress: 65/100
-progress: 66/100
-progress: 67/100
-progress: 68/100
-progress: 69/100
-progress: 70/100
-progress: 71/100
-progress: 72/100
-progress: 73/100
-progress: 74/100
-progress: 75/100
-progress: 76/100
-progress: 77/100
-progress: 78/100
-progress: 79/100
-progress: 80/100
-progress: 81/100
-progress: 82/100
-progress: 83/100
-progress: 84/100
-progress: 85/100
-progress: 86/100
-progress: 87/100
-progress: 88/100
-progress: 89/100
-progress: 90/100
-progress: 91/100
-progress: 92/100
-progress: 93/100
-progress: 94/100
-progress: 95/100
-progress: 96/100
-progress: 97/100
-progress: 98/100
-progress: 99/100
-Test done, Starting data collection after 5 seconds
-Collecting Locust stats
-Cleaning up setup.
-release "epi-bf" uninstalled
-release "locust" uninstalled
-configmap "loadtest-locustfile" deleted
-configmap "loadtest-lib" deleted
-Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_15_20210621143207
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_15_20210621143207
-Deleting old bridging function logs
-Removing BF stats from 145.100.110.91
-Removing BF stats from 145.100.110.92
-Killing the Worker node monitoring script
-Running Test number 16
-Creating Directory hpa_test_data/TEST_NO_16_20210621143515
-Start Worker node monitoring
-Deploying the Briding function, Proxy, and Server
-"epi-helm" already exists with the same configuration, skipping
-NAME: epi-bf
-LAST DEPLOYED: Mon Jun 21 14:35:20 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-Deploying Locust load generator
-"deliveryhero" already exists with the same configuration, skipping
-configmap/loadtest-locustfile created
-configmap/loadtest-lib created
-NAME: locust
-LAST DEPLOYED: Mon Jun 21 14:35:28 2021
-NAMESPACE: epi
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-## To access the locust master UI
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace epi svc -w locust'
-  export SERVICE_IP=$(kubectl get svc --namespace epi locust --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
-  echo http://$SERVICE_IP:
-Setup is deploying, sleeping for 10 seconds
-Locust service URL is http://145.100.110.82:8089
-Checking if Locust service is ready.
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
-Locust not ready yet, checking again!
-Locust retrun 200, Service is ready.
-Locust is starting, sleeping for 10 seconds
-Starting locust request
-http://145.100.110.82:8089/swarm
-<Response [200]>
-progress: 0/100
-progress: 1/100
-progress: 2/100
-progress: 3/100
-progress: 4/100
-progress: 5/100
-progress: 6/100
-progress: 7/100
-progress: 8/100
-progress: 9/100
-progress: 10/100
-progress: 11/100
-progress: 12/100
-progress: 13/100
-progress: 14/100
-progress: 15/100
-progress: 16/100
-progress: 17/100
-progress: 18/100
-progress: 19/100
-progress: 20/100
-progress: 21/100
-progress: 22/100
-progress: 23/100
-progress: 24/100
-progress: 25/100
-progress: 26/100
-progress: 27/100
-progress: 28/100
-progress: 29/100
-progress: 30/100
-progress: 31/100
-progress: 32/100
-progress: 33/100
-progress: 34/100
-progress: 35/100
-progress: 36/100
-progress: 37/100
-progress: 38/100
-progress: 39/100
-progress: 40/100
-progress: 41/100
-progress: 42/100
-progress: 43/100
-progress: 44/100
-progress: 45/100
-progress: 46/100
-progress: 47/100
-progress: 48/100
-progress: 49/100
-progress: 50/100
-progress: 51/100
-progress: 52/100
-progress: 53/100
-progress: 54/100
-progress: 55/100
-progress: 56/100
-progress: 57/100
-progress: 58/100
-progress: 59/100
-progress: 60/100
-progress: 61/100
-progress: 62/100
-progress: 63/100
-progress: 64/100
-progress: 65/100
-progress: 66/100
-progress: 67/100
-progress: 68/100
-progress: 69/100
-progress: 70/100
-progress: 71/100
-progress: 72/100
-progress: 73/100
-progress: 74/100
-progress: 75/100
-progress: 76/100
-progress: 77/100
-progress: 78/100
-progress: 79/100
-progress: 80/100
-progress: 81/100
-progress: 82/100
-progress: 83/100
-progress: 84/100
-progress: 85/100
-progress: 86/100
-progress: 87/100
-progress: 88/100
-progress: 89/100
-progress: 90/100
-progress: 91/100
-progress: 92/100
-progress: 93/100
-progress: 94/100
-progress: 95/100
-progress: 96/100
-progress: 97/100
-progress: 98/100
-progress: 99/100
-Test done, Starting data collection after 5 seconds
-Collecting Locust stats
-Cleaning up setup.
-release "epi-bf" uninstalled
-release "locust" uninstalled
-configmap "loadtest-locustfile" deleted
-configmap "loadtest-lib" deleted
-Collecting briding function stats
-Copying BF stats from 145.100.110.91 to hpa_test_data/TEST_NO_16_20210621143515
-Copying BF stats from 145.100.110.92 to hpa_test_data/TEST_NO_16_20210621143515
-Deleting old bridging function logs
-Removing BF stats from 145.100.110.91
-Removing BF stats from 145.100.110.92
-Killing the Worker node monitoring script
-All tests are done, generated data available in hpa_test_data
