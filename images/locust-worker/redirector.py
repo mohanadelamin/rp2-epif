@@ -93,8 +93,7 @@ def redirector():
 
         proxy_socket = SocksSocket()
         proxy_socket.connect((dst_host, dst_port))
-
-        bidirectional_copy(client_socket, proxy_socket)
+        Thread(bidirectional_copy(client_socket, proxy_socket)).start()
 
 
 if __name__ == "__main__":
