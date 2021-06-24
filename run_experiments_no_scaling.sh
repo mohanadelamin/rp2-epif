@@ -138,7 +138,7 @@ do
     
     COUNTER=1
     MAX_PODS=10
-    RUN_TIME=60
+    RUN_TIME=200
 
     
     while [  $COUNTER -lt ${MAX_PODS} ]; do
