@@ -96,7 +96,8 @@ do
     --set worker.command[1]="/entrypoint.sh" \
     --set loadtest.locust_locustfile_configmap=loadtest-locustfile \
     --set loadtest.locust_lib_configmap=loadtest-lib \
-    --set loadtest.locust_host="http://epi-server"
+    --set loadtest.locust_host="http://epi-server" \
+    --set image.pullPolicy="Always"
     # --set worker.hpa.enabled=true \
     # --set worker.hpa.maxReplicas=5 \
     # --set worker.hpa.targetCPUUtilizationPercentage=80 \

@@ -12,7 +12,7 @@ class WebsiteUser(HttpUser):
 
     @task(1)
     def get_index(self):
-        print("Hello")
+        print("Request")
         self.client.get("/", headers=default_headers)
 
     # @task(3)

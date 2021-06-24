@@ -83,7 +83,7 @@ def redirector():
 
     server = Socket(AF_INET, SOCK_STREAM)
     server.bind(("127.0.0.1", 42000))
-    server.listen(5)
+    server.listen(1000)
 
     while True:
         client_socket, (src_host, src_port) = server.accept()
