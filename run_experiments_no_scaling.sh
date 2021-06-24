@@ -74,7 +74,9 @@ do
     --set bf_hpa.mem_averageUtilization="60" \
     --set proxy.image=${PROXY_IMAGE} \
     --set server.image=${SERVER_IMAGE} \
-    --set bf.service_type=${SERVICE_TYPE}
+    --set bf.service_type=${SERVICE_TYPE} \
+    --set bf.cpu_request="50m"
+
 
     # Deploy Locust helm chart to repo
     echo "Deploying Locust load generator"
