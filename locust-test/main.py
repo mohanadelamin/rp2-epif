@@ -8,11 +8,11 @@ default_headers = {'Connection': 'close','User-Agent': 'Mozilla/5.0 (Macintosh; 
 
 class WebsiteUser(HttpUser):
     # wait_time = between(1, 2)
-    wait_time = constant(0.1)
+    wait_time = constant(0.01)
 
     @task(1)
     def get_index(self):
-        print("Request")
+        print("Hello")
         self.client.get("/", headers=default_headers)
 
     # @task(3)
