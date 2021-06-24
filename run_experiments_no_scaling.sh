@@ -75,7 +75,7 @@ do
     --set proxy.image=${PROXY_IMAGE} \
     --set server.image=${SERVER_IMAGE} \
     --set bf.service_type=${SERVICE_TYPE} \
-    --set bf.cpu_request="50m"
+    --set bf.cpu_request="5m"
 
 
     # Deploy Locust helm chart to repo
