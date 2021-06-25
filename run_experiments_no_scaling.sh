@@ -140,9 +140,10 @@ do
     python3 scripts/locust_start_request.py ${NUMBER_OF_USERS} ${SPAWN_RATE} ${LOCUST_SVC_URL}
     
     COUNTER=1
-    MAX_PODS=5
+    MAX_PODS=10
     RUN_TIME=100
 
+    sleep 100
     
     while [  $COUNTER -lt ${MAX_PODS} ]; do
         timer=0
