@@ -18,6 +18,8 @@ EXPERIMENTS_VARS=$1
 OUTPUT_DIR=$2
 NAMESPACE=$3
 
+HPA_ENABLED="false"
+
 SERVICE_TYPE="LoadBalancer"
 #BF_IMAGE=pimpaardekooper/vnf_instances:http_filter_no_stress
 BF_IMAGE="melamin/epi_vnf_http_filter:v0.0.9"
@@ -68,6 +70,7 @@ do
     --set bf.image=${BF_IMAGE} \
     --set bf.cpu_limit=${BF_CPU_LIMIT} \
     --set bf.mem_limit=${BF_MEM_LIMIT} \
+    --set bf_hpa.enapled=${HPA_ENABLED} \
     --set bf_hpa.maxReplicas=${HPA_MAX_REPLICAS} \
     --set bf_hpa.cpu_averageUtilization=${HPA_UTILIZATION} \
     --set bf_hpa.mem_averageUtilization="60" \
@@ -104,9 +107,13 @@ do
     echo "Setup is deploying, sleeping for 10 seconds"
     sleep 10
 
-    # Start HPA monitoring script
-    echo "Start the HPA Monitoring script"
-    bash scripts/hpa_monitor.sh ${TEST_DIR} &
+    # Start HPA monitoring script if HPA is enabled
+
+    if [ ${HPA_ENABLED} = "true" ]
+    then
+        echo "Start the HPA Monitoring script"
+        bash scripts/hpa_monitor.sh ${TEST_DIR} &
+    fi
 
     # CHECK if Locust is alive.
     while test -z "${LOCUST_SVC_IP}"
