@@ -118,7 +118,7 @@ do
     if [ ${HPA_MEM_ENABLED} = true ]
     then
         echo "Starting the Memory HPA monitroing script"
-        bash script/hpa_mem_monitor.sh ${TEST_DIR}
+        bash scripts/hpa_mem_monitor.sh ${TEST_DIR} &
     fi
 
     # CHECK if Locust is alive.
