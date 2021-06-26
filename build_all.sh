@@ -11,7 +11,8 @@ helm install epi-bf epi-helm/epi_bf_helm -n epi \
 --set proxy.image="pimpaardekooper/vnf_instances:proxy" \
 --set server.image="pimpaardekooper/vnf_instances:server" \
 --set bf.service_type="ClusterIP" \
---set bf_hpa.enabled=true \
+--set bf_hpa.cpu_enabled=false \
+--set bf_hpa.mem_enabled=true \
 --set bf_custom_hpa.enabled=False
 
 # Deploy Locust helm chart to repo

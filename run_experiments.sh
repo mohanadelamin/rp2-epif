@@ -18,7 +18,8 @@ EXPERIMENTS_VARS=$1
 OUTPUT_DIR=$2
 NAMESPACE=$3
 
-HPA_ENABLED=false
+HPA_CPU_ENABLED=false
+HPA_MEM_ENABLED=true
 
 SERVICE_TYPE="LoadBalancer"
 #BF_IMAGE=pimpaardekooper/vnf_instances:http_filter_no_stress
@@ -51,7 +52,6 @@ do
     BF_MEM_LIMIT=${test_array[7]}
 
 
-
     echo "Running Test number ${TEST_NO}"
     NOW=$( date '+%Y%m%d%H%M%S' )
     TEST_DIR="${OUTPUT_DIR}/TEST_NO_${TEST_NO}"
@@ -59,7 +59,6 @@ do
     mkdir ${TEST_DIR}
 
     echo "${BF_CPU_LIMIT},0,${BF_MEM_LIMIT},0" > "${TEST_DIR}/bf_milicore.txt"
-
 
     echo "Start Worker node monitoring"
     sudo python3 scripts/xen_vm_stats.py ${TEST_DIR} 1>/dev/null 2>/dev/null &
@@ -70,10 +69,11 @@ do
     --set bf.image=${BF_IMAGE} \
     --set bf.cpu_limit=${BF_CPU_LIMIT} \
     --set bf.mem_limit=${BF_MEM_LIMIT} \
-    --set bf_hpa.enabled=${HPA_ENABLED} \
+    --set bf_hpa.cpu_enabled=${HPA_CPU_ENABLED} \
+    --set bf_hpa.mem_enabled=${HPA_MEM_ENABLED} \
     --set bf_hpa.maxReplicas=${HPA_MAX_REPLICAS} \
     --set bf_hpa.cpu_averageUtilization=${HPA_UTILIZATION} \
-    --set bf_hpa.mem_averageUtilization="60" \
+    --set bf_hpa.mem_averageUtilization=${HPA_UTILIZATION} \
     --set proxy.image=${PROXY_IMAGE} \
     --set server.image=${SERVER_IMAGE} \
     --set bf.service_type=${SERVICE_TYPE}
@@ -109,10 +109,16 @@ do
 
     # Start HPA monitoring script if HPA is enabled
 
-    if [ ${HPA_ENABLED} = true ]
+    if [ ${HPA_CPU_ENABLED} = true ]
     then
         echo "Start the HPA Monitoring script"
         bash scripts/hpa_monitor.sh ${TEST_DIR} &
+    fi
+
+    if [ ${HPA_MEM_ENABLED} = true ]
+    then
+        echo "Starting the Memory HPA monitroing script"
+        bash script/hpa_mem_monitor.sh ${TEST_DIR}
     fi
 
     # CHECK if Locust is alive.
@@ -170,10 +176,16 @@ do
     echo "Collecting worker response times file"
     ./scripts/get_response_time_worker.sh ${TEST_DIR} ${NAMESPACE}
 
-    if [ ${HPA_ENABLED} = true ]
+    if [ ${HPA_CPU_ENABLED} = true ]
     then
         echo "Killing the HPA monitoring script"
         sudo kill -9 $(ps aux | grep hpa_monitor | grep -v grep | awk '{print $2}')
+    fi
+
+    if [ ${HPA_MEM_ENABLED} = true ]
+    then
+        echo "Killing the HPA Memory monitoring script"
+        sudo kill -9 $(ps aux | grep hpa_mem_monitor | grep -v grep | awk '{print $2}')
     fi
 
     echo "Cleaning up setup."
