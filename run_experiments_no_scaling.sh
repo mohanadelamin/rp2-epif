@@ -77,6 +77,7 @@ do
     --set bf.service_type=${SERVICE_TYPE} \
     --set bf.cpu_request="5m"
 
+    kubectl scale --replicas=2 deployment/epi-bf -n epi
 
     # Deploy Locust helm chart to repo
     echo "Deploying Locust load generator"
@@ -105,6 +106,8 @@ do
     # --set worker.resources.requests.cpu="200m" \
 
     echo "Setup is deploying, sleeping for 10 seconds"
+    sleep 5
+    kubectl scale --replicas=2 deployment/epi-bf -n epi
     sleep 10
 
     # Start HPA monitoring script
@@ -139,7 +142,7 @@ do
     echo "Starting locust request"
     python3 scripts/locust_start_request.py ${NUMBER_OF_USERS} ${SPAWN_RATE} ${LOCUST_SVC_URL}
     
-    COUNTER=1
+    COUNTER=2
     MAX_PODS=10
     RUN_TIME=100
 
