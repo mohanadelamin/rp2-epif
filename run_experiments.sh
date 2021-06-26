@@ -18,7 +18,7 @@ EXPERIMENTS_VARS=$1
 OUTPUT_DIR=$2
 NAMESPACE=$3
 
-HPA_ENABLED="false"
+HPA_ENABLED=false
 
 SERVICE_TYPE="LoadBalancer"
 #BF_IMAGE=pimpaardekooper/vnf_instances:http_filter_no_stress
@@ -70,7 +70,7 @@ do
     --set bf.image=${BF_IMAGE} \
     --set bf.cpu_limit=${BF_CPU_LIMIT} \
     --set bf.mem_limit=${BF_MEM_LIMIT} \
-    --set bf_hpa.enapled=${HPA_ENABLED} \
+    --set bf_hpa.enabled=${HPA_ENABLED} \
     --set bf_hpa.maxReplicas=${HPA_MAX_REPLICAS} \
     --set bf_hpa.cpu_averageUtilization=${HPA_UTILIZATION} \
     --set bf_hpa.mem_averageUtilization="60" \
@@ -109,7 +109,7 @@ do
 
     # Start HPA monitoring script if HPA is enabled
 
-    if [ ${HPA_ENABLED} = "true" ]
+    if [ ${HPA_ENABLED} = true ]
     then
         echo "Start the HPA Monitoring script"
         bash scripts/hpa_monitor.sh ${TEST_DIR} &
@@ -142,17 +142,17 @@ do
     # Start locust test
     echo "Starting locust request"
     python3 scripts/locust_start_request.py ${NUMBER_OF_USERS} ${SPAWN_RATE} ${LOCUST_SVC_URL}
-    
+
     COUNTER=0
     MAX_PODS=10
-    
+
     #while [  $COUNTER -lt ${MAX_PODS} ]; do
     #    sleep 60
     #    kubectl scale --replicas=1 deployment/epi-bf -n epi
     #    let COUNTER=COUNTER+1 
     #done
     # deploy extra pod
-    
+
     timer=0
     while [[ ${timer} -lt ${RUN_TIME} ]];
     do
@@ -170,8 +170,11 @@ do
     echo "Collecting worker response times file"
     ./scripts/get_response_time_worker.sh ${TEST_DIR} ${NAMESPACE}
 
-    echo "Killing the HPA monitoring script"
-    sudo kill -9 $(ps aux | grep hpa_monitor | grep -v grep | awk '{print $2}')
+    if [ ${HPA_ENABLED} = true ]
+    then
+        echo "Killing the HPA monitoring script"
+        sudo kill -9 $(ps aux | grep hpa_monitor | grep -v grep | awk '{print $2}')
+    fi
 
     echo "Cleaning up setup."
     helm delete epi-bf -n ${NAMESPACE}
@@ -186,7 +189,6 @@ do
     done
 
 
-    
     echo "Deleting old bridging function logs"
     for NODE in ${WORKERS[@]}
     do
