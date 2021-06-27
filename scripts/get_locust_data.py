@@ -8,6 +8,9 @@ import pandas as pd
 import os
 import sys
 
+# Usage:
+# python3 get_locust_data.py <DIR> <LOCUST_SVC_URL>
+
 if len(sys.argv) < 2:
     print("give filename")
     exit(1)

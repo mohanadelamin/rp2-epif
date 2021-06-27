@@ -3,7 +3,11 @@ import requests
 import os
 import sys
 
-if len(sys.argv) < 3:
+# Usage:
+# python3 locust_start_request.py <NUMBER_OF_USERS> <SPAWN_RATE> <LOCUST_SVC_URL>
+#
+
+if len(sys.argv) < 4:
     print("Give user count and spawn rate")
     exit(1)
 
